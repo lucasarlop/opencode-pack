@@ -1,5 +1,5 @@
 ---
-description: Inicia o planejamento de uma nova tarefa no modo PLAN, criando a spec JSON
+description: Inicia o planejamento de uma nova tarefa no modo PLAN, criando obrigatoriamente o arquivo de spec JSON
 agent: plan
 ---
 
@@ -10,7 +10,10 @@ Inicie o protocolo Spec-First para a seguinte solicitação:
 Siga obrigatoriamente o protocolo em `.opencode/rules/planning.md`:
 1. Analise o código relevante
 2. Identifique o próximo `task_id` sequencial em `.opencode/specs/`
-3. Gere a spec usando `.opencode/templates/spec_template.json`
-4. Apresente o plano de forma legível antes de salvar
+3. **Crie o arquivo** `.opencode/specs/NNNN_<nome>.json` usando `.opencode/templates/spec_template.json`
+4. Após salvar o arquivo, apresente o plano de forma legível informando o caminho do arquivo criado
+
+⚠️ OBRIGATÓRIO: O arquivo JSON deve ser criado antes de apresentar o plano.
+Apresentar o plano em texto sem criar o arquivo é uma violação do protocolo. Não faça isso.
 
 Lembre: no modo PLAN, não edite arquivos de código-fonte.

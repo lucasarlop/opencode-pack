@@ -27,13 +27,15 @@ Ao receber uma solicitação de nova funcionalidade, refatoração ou correção
    - Se o último for `0005_...`, o novo será `0006_...`
 
 3. **Geração da spec**
-   - Crie `.opencode/specs/NNNN_<nome_descritivo>.json`
+   - **OBRIGATÓRIO:** Crie o arquivo físico `.opencode/specs/NNNN_<nome_descritivo>.json`
    - Use obrigatoriamente o template em `.opencode/templates/spec_template.json`
    - Preencha `tdd_required` com base nas regras de TDD do AGENTS.md
    - Preencha `environment_checks` se houver dependências Docker ou serviços externos
+   - ⚠️ Apresentar o plano em texto sem criar o arquivo JSON **é uma violação do protocolo**
 
 4. **Apresentação**
-   - Mostre o plano ao usuário de forma legível (não apenas o JSON bruto)
+   - Após criar o arquivo, mostre o plano ao usuário de forma legível (não apenas o JSON bruto)
+   - Informe o caminho do arquivo criado: `.opencode/specs/NNNN_<nome>.json`
    - Aguarde aprovação explícita
 
 ---

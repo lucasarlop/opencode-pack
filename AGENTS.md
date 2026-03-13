@@ -1,76 +1,89 @@
 # AGENTS.md
 
-## 1. Protocolo operacional — Spec-First (obrigatório)
+<!-- INSTRUÇÕES PARA /init:
+  - Preencha APENAS as seções marcadas com [PREENCHER]
+  - NÃO modifique seções marcadas com [FIXO] — são parte do protocolo do projeto
+  - NÃO altere caminhos como .opencode/, são convenções do projeto
+-->
+
+---
+
+## 1. Protocolo operacional — Spec-First [FIXO]
 
 **CRÍTICO:** Todo trabalho de modificação segue o protocolo Spec-First.
 Regras detalhadas estão em `.opencode/rules/planning.md`.
 
-1. **Modo PLAN**: Analise o pedido → crie a spec em `.opencode/specs/NNNN_<nome>.json` usando `.opencode/templates/spec_template.json` → apresente ao usuário. **Nunca edite código nesta fase.**
+1. **Modo PLAN**:
+   - Analise o pedido e mapeie dependências no código atual
+   - **Crie obrigatoriamente o arquivo** `.opencode/specs/NNNN_<nome>.json` usando `.opencode/templates/spec_template.json`
+   - Apresente o plano ao usuário
+   - ⚠️ Apresentar o plano apenas em texto **sem criar o arquivo JSON é uma violação do protocolo**
+   - **Nunca edite arquivos de código nesta fase**
 2. **Revisão**: Aguarde aprovação explícita antes de avançar.
 3. **Modo BUILD**: Execute passo a passo → verifique cada step → atualize o `outcome` da spec ao concluir.
 
 ---
 
-## 2. Visão geral do projeto
-<!-- /init: preencher com stack, entry point, módulos principais, propósito -->
+## 2. Visão geral do projeto [PREENCHER]
+
+<!-- /init: descreva stack, entry point, módulos principais e propósito do projeto -->
 
 ---
 
-## 3. Ambiente e infraestrutura
+## 3. Ambiente e infraestrutura [FIXO + PREENCHER]
 
-### Python
-- Versão: <!-- /init: ex. 3.11 -->
-- Gerenciador de pacotes: <!-- /init: pip / poetry / uv -->
+### Python [FIXO]
 - Virtualenv: sempre usar `.venv` local ao projeto
-- Formatação: ruff (padrão) — rodar antes de commitar
+- Formatação: ruff — rodar antes de commitar
 - Testes: pytest — obrigatório para lógica de negócio isolada
 
-### Docker
-- Sempre verificar se existe `docker-compose.yml` ou `compose.yaml` antes de rodar serviços
+### Docker [FIXO]
+- Sempre verificar se existe `docker-compose.yml` antes de rodar serviços
 - Preferir `docker compose up -d` para subir dependências locais
 - Nunca hardcodar portas ou credenciais — usar `.env` (nunca commitado)
 - Verificar saúde dos containers com `docker compose ps` após subir
 
-### Comandos principais
-<!-- /init: preencher com comandos reais do projeto -->
-- Instalar deps: `<!-- ex: uv sync / pip install -r requirements.txt -->`
-- Rodar local: `<!-- ex: uvicorn app.main:app --reload / python -m app -->`
-- Testes: `<!-- ex: pytest / pytest -v --cov=app -->`
-- Build Docker: `<!-- ex: docker build -t nome:tag . -->`
-- Subir ambiente: `<!-- ex: docker compose up -d -->`
+### Versões e comandos [PREENCHER]
+
+<!-- /init: preencha versão Python, gerenciador de pacotes e comandos reais do projeto -->
+- Python: 
+- Gerenciador de pacotes: 
+- Instalar deps: 
+- Rodar local: 
+- Testes: 
+- Subir ambiente Docker: 
 
 ---
 
-## 4. O que NÃO fazer
+## 4. O que NÃO fazer [FIXO]
+
 - Não modificar arquivos fora do escopo da spec aprovada
 - Não introduzir dependências sem aprovação explícita
 - Não hardcodar credenciais, URLs de produção ou secrets
 - Não reformatar arquivos sem necessidade
-- Não commitar `.env`, `.venv`, `__pycache__`, ou arquivos de build
+- Não commitar `.env`, `.venv`, `__pycache__`, `node_modules/` ou arquivos de build
 - Não alterar `docker-compose.yml` sem mencionar explicitamente no plano
 
 ---
 
-## 5. TDD — quando aplicar
+## 5. TDD — quando aplicar [FIXO]
+
 Consulte a skill `tdd` para o protocolo completo.
-Regra resumida:
+
 - **Aplicar**: lógica de negócio isolada, funções puras, parsers, validações, ETL transforms
 - **Não aplicar**: endpoints de API sem lógica complexa, UI, scripts de automação simples
 - A spec deve declarar `"tdd_required": true/false` explicitamente
 
 ---
 
-## 6. Estilo e convenções
-<!-- /init: preencher com padrões específicos do projeto -->
-- Nomes de variáveis: snake_case (Python)
-- Nomes de classes: PascalCase
-- Evitar lógica complexa em arquivos de configuração
-- Manter arquivos pequenos e com responsabilidade única
-- Docstrings em funções públicas e classes
+## 6. Estilo e convenções [PREENCHER]
+
+<!-- /init: preencha com padrões específicos do projeto (nomenclatura, imports, etc.) -->
 
 ---
 
-## 7. Arquivos de referência
+## 7. Arquivos de referência [FIXO]
+
 - Protocolo de planejamento: `.opencode/rules/planning.md`
 - Template de spec: `.opencode/templates/spec_template.json`
 - Specs anteriores: `.opencode/specs/`
