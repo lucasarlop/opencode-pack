@@ -43,7 +43,7 @@ Após a instalação, o `install.sh` também cria:
 
 ```bash
 # Clone o pack
-git clone https://github.com/seu-usuario/opencode-pack.git
+git clone https://github.com/lucasarlop/opencode-pack.git
 
 # Entre no seu projeto
 cd meu-projeto
@@ -189,7 +189,7 @@ git commit -m "feat: opencode bootstrap pack v1.0.0"
 gh repo create opencode-pack --public --source=. --push
 
 # ou manual
-git remote add origin https://github.com/seu-usuario/opencode-pack.git
+git remote add origin https://github.com/lucasarlop/opencode-pack.git
 git branch -M main
 git push -u origin main
 ```
@@ -198,9 +198,9 @@ Para instalar em qualquer projeto a partir do repo:
 
 ```bash
 # Clone e instale
-git clone https://github.com/seu-usuario/opencode-pack.git /tmp/opencode-pack
+git clone https://github.com/lucasarlop/opencode-pack.git /tmp/opencode-pack
 bash /tmp/opencode-pack/install.sh
 
 # Ou one-liner (após o repo estar público)
-bash <(curl -s https://raw.githubusercontent.com/seu-usuario/opencode-pack/main/install.sh)
+bash <(curl -s https://raw.githubusercontent.com/lucasarlop/opencode-pack/main/install.sh)
 ```

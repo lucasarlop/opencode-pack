@@ -1,12 +1,17 @@
 #!/usr/bin/env bash
 # install.sh
 # Instala o opencode-pack no projeto atual
-# Uso: bash install.sh [caminho/do/projeto] [--force]
+#
+# Uso direto (repo clonado):
+#   bash install.sh [caminho/do/projeto] [--force]
+#
+# Uso remoto (one-liner):
+#   bash <(curl -s https://raw.githubusercontent.com/lucasarlop/opencode-pack/main/install.sh)
+#   → clona automaticamente e instala no diretório atual
 
 set -euo pipefail
 
-PACK_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-PACK_VERSION="$(cat "$PACK_DIR/VERSION" 2>/dev/null || echo "unknown")"
+REPO_URL="https://github.com/lucasarlop/opencode-pack.git"
 TARGET_DIR="$(pwd)"
 FORCE=false
 
@@ -17,6 +22,20 @@ for arg in "$@"; do
     *) TARGET_DIR="$arg" ;;
   esac
 done
+
+# Detecta se está rodando via pipe/curl (BASH_SOURCE[0] não é um arquivo real)
+PACK_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+if [[ "$PACK_DIR" == /proc/* ]] || [[ ! -f "$PACK_DIR/VERSION" ]]; then
+  echo "opencode-pack — modo remoto detectado, clonando repositório..."
+  TMP_DIR="$(mktemp -d)"
+  trap 'rm -rf "$TMP_DIR"' EXIT
+  git clone --depth=1 "$REPO_URL" "$TMP_DIR" --quiet
+  PACK_DIR="$TMP_DIR"
+  echo "✓ Repositório clonado"
+  echo ""
+fi
+
+PACK_VERSION="$(cat "$PACK_DIR/VERSION" 2>/dev/null || echo "unknown")"
 
 echo "opencode-pack v$PACK_VERSION — instalando em: $TARGET_DIR"
 echo ""
