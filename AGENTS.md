@@ -13,10 +13,9 @@
 -->
 
 > **ATENÇÃO:** Este projeto utiliza **exclusivamente** o diretório `.opencode/` para
-> regras, specs, templates, commands e skills. NÃO procure nem crie arquivos em
-> `.claude/`, `.cursor/`, `.copilot/`, `.github/copilot-instructions.md` ou qualquer
-> outro diretório específico de ferramenta. Toda a configuração do agente está em
-> `.opencode/` e no presente arquivo.
+> regras, specs, templates, commands e skills.
+> - **NÃO** leia, não liste e não tente abrir `.claude/`, `.Claude/`, `.cursor/`, `.copilot/` ou `.github/copilot-instructions.md`. Esses caminhos não fazem parte deste projeto.
+> - **Use somente** `.opencode/` e o presente arquivo (`AGENTS.md`) para configuração do agente.
 
 ---
 
@@ -176,6 +175,7 @@ Consulte a skill `tdd` para o protocolo completo.
 
 ## 10. O que NÃO Fazer [FIXO]
 
+- Não ler, listar nem consultar `.claude/`, `.Claude/`, `.cursor/`, `.copilot/` ou instruções de outras ferramentas; o projeto usa apenas `.opencode/` e `AGENTS.md`.
 - Não modificar arquivos fora do escopo da spec aprovada.
 - Não introduzir dependências sem aprovação explícita.
 - Não hardcodar credenciais, URLs de produção ou secrets.

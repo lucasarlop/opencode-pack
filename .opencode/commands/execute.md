@@ -3,6 +3,8 @@ description: Executa a implementação da última spec aprovada em .opencode/spe
 agent: build
 ---
 
+**Configuração do projeto:** use apenas `.opencode/` e `AGENTS.md`; não leia nem liste `.claude/`, `.Claude/`, `.cursor/`, etc.
+
 Usando a última spec, realize a implementação. Siga o protocolo em `.opencode/rules/planning.md`:
 
 1. Leia os arquivos em `.opencode/specs/` e identifique a spec mais recente com status `planned`

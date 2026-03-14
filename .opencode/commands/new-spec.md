@@ -3,6 +3,8 @@ description: Inicia o planejamento de uma nova tarefa no modo PLAN, criando obri
 agent: plan
 ---
 
+**Configuração do projeto:** use apenas `.opencode/` e `AGENTS.md`. Não leia nem liste `.claude/`, `.Claude/`, `.cursor/` ou outros diretórios de ferramenta.
+
 Inicie o protocolo Spec-First para a seguinte solicitação:
 
 **Solicitação:** $ARGUMENTS

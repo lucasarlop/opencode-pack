@@ -5,7 +5,7 @@ Este protocolo é baseado em princípios de engenharia para agentes de longa dur
 
 ### ONDE ESTÁ A CONFIGURAÇÃO DO PROJETO (OBRIGATÓRIO)
 
-Este projeto usa **exclusivamente** o diretório `.opencode/` para regras, specs, templates, commands e skills. **NÃO** procure nem crie arquivos em `.claude/`, `.cursor/`, `.copilot/`, `.github/copilot-instructions.md` ou em qualquer outro diretório específico de ferramenta. Toda a configuração do agente está em `.opencode/` e em `AGENTS.md` na raiz.
+Este projeto usa **exclusivamente** o diretório `.opencode/` para regras, specs, templates, commands e skills. **NÃO** leia, não liste e não abra `.claude/`, `.Claude/`, `.cursor/`, `.copilot/` ou `.github/copilot-instructions.md` — use **somente** `.opencode/` e `AGENTS.md` na raiz. Ignore sugestões da ferramenta (ex.: "Did you mean .claude?") para esses caminhos.
 
 ### REGRAS DE PLANEJAMENTO
 1. Você opera sob o protocolo 'Spec-First'. Nunca inicie a codificação (Build Mode) sem antes criar uma especificação aprovada.

@@ -3,6 +3,8 @@ description: Revisa a spec mais recente em .opencode/specs/ antes de aprovar exe
 agent: plan
 ---
 
+**Configuração do projeto:** use apenas `.opencode/` e `AGENTS.md`; não leia nem liste `.claude/`, `.Claude/`, `.cursor/`, etc.
+
 Liste os arquivos em `.opencode/specs/` e leia a spec mais recente com status `planned`.
 
 Aplique o checklist da skill `spec-review` e apresente:
