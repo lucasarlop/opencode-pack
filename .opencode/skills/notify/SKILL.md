@@ -1,27 +1,22 @@
 ---
 name: notify
-description: Envia notificações ao encerrar tarefas longas. Use ao finalizar specs, builds demorados ou qualquer tarefa que o usuário pediu para ser notificado. Suporta notify-send (Linux desktop) e Telegram.
+description: Notificações automáticas ao concluir tarefas. Executado automaticamente pelo /execute ao finalizar uma spec. Suporta notify-send (Linux desktop) e Telegram como override.
 license: MIT
 compatibility: opencode
 ---
 
 ## O que faço
 
-Executo o script `.opencode/commands/notify.sh` para notificar o usuário ao final de tarefas longas.
+Notifico o usuário automaticamente ao final da execução de uma spec, via o script `.opencode/commands/notify.sh`.
 
-## Quando usar
+## Comportamento padrão
 
-- Ao marcar spec como `completed`
-- Ao finalizar build ou deploy demorado
-- Quando o usuário pedir explicitamente para ser notificado
+A notificação é **automática** — o `/execute` chama `notify.sh` ao concluir a spec. O usuário não precisa lembrar de notificar manualmente.
 
-## Como usar
-
-O comando `/notify` está disponível no OpenCode. Ele aceita uma mensagem opcional:
-
-```
-/notify Migração do banco concluída com sucesso
-```
+Prioridade de envio:
+1. **Telegram** — se `TELEGRAM_BOT_TOKEN` e `TELEGRAM_CHAT_ID` estiverem no `.env`
+2. **notify-send** — notificação desktop Linux (sempre tenta, independente do Telegram)
+3. **Terminal** — fallback se nenhum dos anteriores estiver disponível
 
 ## Configuração do Telegram (opcional)
 
@@ -36,7 +31,10 @@ Para obter o token: crie um bot via @BotFather no Telegram.
 Para obter o chat_id: envie uma mensagem ao bot e acesse:
 `https://api.telegram.org/bot<TOKEN>/getUpdates`
 
-## Fallback
+## Uso manual
 
-Se Telegram não estiver configurado, usa `notify-send` (Linux).
-Se nenhum estiver disponível, imprime no terminal.
+Caso queira notificar fora do fluxo do `/execute`:
+
+```bash
+.opencode/commands/notify.sh "Mensagem aqui"
+```

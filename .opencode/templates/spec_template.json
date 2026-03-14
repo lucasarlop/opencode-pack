@@ -10,9 +10,9 @@
     "title": "Título descritivo da tarefa",
     "primary_goal": "O objetivo principal macro desta execução.",
     "definition_of_done": [
-      "Critério verificável 1",
-      "Critério verificável 2",
-      "Nenhuma regressão nos testes existentes"
+      "Critério 1: O código compila sem erros.",
+      "Critério 2: A nova funcionalidade passa no teste X.",
+      "Critério 3: Nenhuma regressão no módulo Y."
     ]
   },
   "environment": {
@@ -43,7 +43,7 @@
   "execution_plan": [
     {
       "step_id": 1,
-      "name": "Nome do passo",
+      "name": "Nome do Passo",
       "reasoning": "Justificativa técnica para este passo.",
       "action": {
         "type": "create_file | edit_file | delete_file | run_command",
@@ -51,8 +51,8 @@
         "description": "O que deve ser feito exatamente."
       },
       "verification": {
-        "manual_check": "O que validar visualmente.",
-        "automated_command": "comando de teste se existir"
+        "manual_check": "O que o humano ou agente deve validar visualmente.",
+        "automated_command": "comando para rodar teste se existir"
       },
       "rollback": "O que desfazer se este step falhar.",
       "dependencies": []

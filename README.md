@@ -11,7 +11,7 @@ Implementa o protocolo **Spec-First** — toda tarefa começa com um plano aprov
 ```
 opencode-pack/
 ├── AGENTS.md                        # Contexto global — lido pelo agente em toda sessão
-├── opencode.json                    # Carrega rules automaticamente
+├── opencode.json                    # Carrega rules, specs e docs automaticamente
 ├── .gitignore                       # Entradas para Python, Docker, .env e specs
 ├── install.sh                       # Script de instalação
 └── .opencode/
@@ -21,15 +21,15 @@ opencode-pack/
     │   └── spec_template.json       # Template de spec v2.1
     ├── commands/
     │   ├── new-spec.md              # /new-spec — inicia planejamento
+    │   ├── execute.md               # /execute — executa spec aprovada + notifica
     │   ├── spec-review.md           # /spec-review — valida spec antes de executar
-    │   ├── notify.md                # /notify — notifica ao concluir tarefa
-    │   └── notify.sh                # Script: notify-send + Telegram
+    │   └── notify.sh                # Script: notify-send + Telegram (chamado pelo /execute)
     └── skills/
         ├── tdd/                     # Protocolo TDD com pytest
         ├── python-docker/           # Boas práticas Python + Docker
         ├── diagrams/                # C4 L1/L2 e sequência com Mermaid
         ├── spec-review/             # Checklist de revisão de specs
-        └── notify/                  # Documentação da skill de notificação
+        └── notify/                  # Documentação da notificação automática
 ```
 
 Após a instalação, o `install.sh` também cria:
@@ -72,8 +72,8 @@ opencode
 # 4. Revise antes de executar
 /spec-review
 
-# 5. Após concluir, notifique
-/notify Autenticação JWT implementada
+# 5. Aprove e execute (notifica automaticamente ao concluir)
+/execute
 ```
 
 ---
@@ -87,6 +87,8 @@ Todo trabalho segue três fases:
 **2. Revisão** — você lê, ajusta se necessário, e aprova explicitamente.
 
 **3. BUILD** — o agente executa passo a passo, verifica cada step e registra o resultado no `outcome` da spec.
+
+Para mais detalhes sobre o fluxo de trabalho, veja `docs/workflow-guide.md`.
 
 ---
 
@@ -104,9 +106,11 @@ As skills são carregadas sob demanda pelo agente. Você pode invocá-las direta
 
 ---
 
-## Notificações via Telegram (opcional)
+## Notificações (automáticas)
 
-Adicione ao `.env` do projeto:
+Ao concluir o `/execute`, o agente notifica automaticamente via `notify.sh`.
+
+Por padrão, usa `notify-send` (Linux desktop). Para receber via Telegram, adicione ao `.env`:
 
 ```env
 TELEGRAM_BOT_TOKEN=seu_token
@@ -116,8 +120,6 @@ TELEGRAM_CHAT_ID=seu_chat_id
 Para obter o token: crie um bot via [@BotFather](https://t.me/BotFather).
 Para obter o chat_id: envie uma mensagem ao bot e acesse:
 `https://api.telegram.org/bot<TOKEN>/getUpdates`
-
-Se não configurado, usa `notify-send` (Linux desktop) como fallback.
 
 ---
 

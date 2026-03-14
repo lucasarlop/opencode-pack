@@ -1,5 +1,3 @@
-
-
 # AGENTS.md
 
 <!-- INSTRUÇÕES PARA /init:
@@ -170,7 +168,7 @@ Consulte a skill `tdd` para o protocolo completo.
 
 ---
 
-## 10. O que NÃO fazer [FIXO]
+## 10. O que NÃO Fazer [FIXO]
 
 - Não modificar arquivos fora do escopo da spec aprovada.
 - Não introduzir dependências sem aprovação explícita.
@@ -201,7 +199,7 @@ Consulte a skill `tdd` para o protocolo completo.
 
 ---
 
-## 13. Quando estiver em Dúvida [FIXO]
+## 13. Quando Estiver em Dúvida [FIXO]
 
 - Siga os padrões atuais no código-fonte do projeto.
 - Prefira mudanças pequenas e incrementais.
