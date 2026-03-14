@@ -1,6 +1,6 @@
 ---
 description: Executa a implementação da última spec aprovada em .opencode/specs/
-agent: code
+agent: build
 ---
 
 Usando a última spec, realize a implementação. Siga o protocolo em `.opencode/rules/planning.md`:
