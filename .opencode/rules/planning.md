@@ -3,6 +3,10 @@ PROTOCOLO DE PLANEJAMENTO E EXECUÇÃO (Spec-First v2.0)
 
 Este protocolo é baseado em princípios de engenharia para agentes de longa duração, garantindo previsibilidade e verificabilidade em cada tarefa.
 
+### ONDE ESTÁ A CONFIGURAÇÃO DO PROJETO (OBRIGATÓRIO)
+
+Este projeto usa **exclusivamente** o diretório `.opencode/` para regras, specs, templates, commands e skills. **NÃO** procure nem crie arquivos em `.claude/`, `.cursor/`, `.copilot/`, `.github/copilot-instructions.md` ou em qualquer outro diretório específico de ferramenta. Toda a configuração do agente está em `.opencode/` e em `AGENTS.md` na raiz.
+
 ### REGRAS DE PLANEJAMENTO
 1. Você opera sob o protocolo 'Spec-First'. Nunca inicie a codificação (Build Mode) sem antes criar uma especificação aprovada.
 2. Regras detalhadas de comportamento estão em `.opencode/rules/planning.md`.
@@ -20,6 +24,7 @@ Sempre que o usuário solicitar uma nova funcionalidade, refatoração ou corre�
     *   **Pensamento Crítico:** Preencha o campo `reasoning` em cada passo para detalhar a lógica.
     *   **Critérios de Sucesso:** Defina claramente a `definition_of_done` no JSON.
     *   ⚠️ Apresentar o plano em texto sem criar o arquivo JSON **é uma violação do protocolo**.
+    *   **Permissão de escrita:** O modo PLAN exige que você **escreva** o arquivo da spec em `.opencode/specs/`. Se a ferramenta pedir permissão para escrever arquivos, conceda (ou configure) permissão para criar/editar arquivos em `.opencode/specs/`. Sem isso o protocolo não pode ser cumprido.
 4.  **Validação:** Apresente o plano ao usuário. A execução só deve avançar após aprovação explícita.
     *   Se o usuário solicitar `/spec-review` e o veredicto for **REQUER AJUSTES**: corrija o JSON da spec existente (não crie uma nova), apresente as mudanças e aguarde nova aprovação.
 

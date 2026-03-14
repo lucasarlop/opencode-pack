@@ -4,6 +4,12 @@
   - Preencha APENAS as seções marcadas com [PREENCHER]
   - NÃO modifique seções marcadas com [FIXO] — são parte do protocolo do projeto
   - NÃO altere caminhos como .opencode/, são convenções do projeto
+  - ORDEM OBRIGATÓRIA: mantenha a ordem exata das 13 seções abaixo. Não reordene, não fundir nem omitir seções.
+  - Ao concluir /init, confira que todas as 13 seções estão presentes e na ordem:
+    1. Protocolo Operacional: Spec-First  2. Visão Geral do Projeto  3. Build e Execução  4. Testes
+    5. Lint / Formatação  6. Dependências e Sistema de Build  7. Ambiente e Infraestrutura
+    8. Layout dos Fontes  9. Diretrizes de Estilo de Código  10. O que NÃO Fazer
+    11. Configuração e Secrets  12. Arquivos de Referência  13. Quando Estiver em Dúvida
 -->
 
 > **ATENÇÃO:** Este projeto utiliza **exclusivamente** o diretório `.opencode/` para

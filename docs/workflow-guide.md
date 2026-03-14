@@ -38,7 +38,8 @@ O agente vai:
 - Criar o arquivo `.opencode/specs/NNNN_autenticacao_jwt.json`
 - Apresentar o plano de forma legível
 
-> ⚠️ O agente **deve criar o arquivo JSON** antes de apresentar o plano. Se ele apenas descrever em texto sem criar o arquivo, é uma violação do protocolo — peça para ele criar o arquivo.
+> ⚠️ O agente **deve criar o arquivo JSON** antes de apresentar o plano. Se ele apenas descrever em texto sem criar o arquivo, é uma violação do protocolo — peça para ele criar o arquivo.  
+> Se a ferramenta pedir **permissão para escrever arquivos**, conceda permissão para `.opencode/specs/`; sem isso o plano não pode ser salvo.
 
 ### 2. Revisar a spec (opcional, recomendado)
 
