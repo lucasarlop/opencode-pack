@@ -21,8 +21,9 @@ Sempre que o usuário solicitar uma nova funcionalidade, refatoração ou corre�
     *   **Critérios de Sucesso:** Defina claramente a `definition_of_done` no JSON.
     *   ⚠️ Apresentar o plano em texto sem criar o arquivo JSON **é uma violação do protocolo**.
 4.  **Validação:** Apresente o plano ao usuário. A execução só deve avançar após aprovação explícita.
+    *   Se o usuário solicitar `/spec-review` e o veredicto for **REQUER AJUSTES**: corrija o JSON da spec existente (não crie uma nova), apresente as mudanças e aguarde nova aprovação.
 
-**REGRA DE OURO:** No modo **PLAN**, é estritamente proibido editar arquivos de código-fonte. A sua única permissão é a criação do arquivo de especificação.
+**REGRA DE OURO:** No modo **PLAN**, é estritamente proibido editar arquivos de código-fonte. A sua única permissão é a criação e edição do arquivo de especificação.
 
 2\. Estrutura de Verificação (Harness)
 --------------------------------------

@@ -43,3 +43,17 @@ Avalio uma spec JSON e aponto problemas antes da execução.
 ```
 
 Ou mencione a skill diretamente: `@spec-review revise a spec 0003`
+
+## Fluxo após a revisão
+
+### Se APROVADO
+O usuário pode prosseguir com `/execute`.
+
+### Se REQUER AJUSTES
+1. O agente lista os problemas encontrados e as correções sugeridas.
+2. O usuário indica quais ajustes aceita (ou todos).
+3. O agente **corrige o JSON da spec existente** — não cria uma nova spec. É o mesmo plano sendo refinado.
+4. O agente apresenta as mudanças realizadas de forma legível.
+5. O ciclo volta para aguardar aprovação explícita antes de avançar para `/execute`.
+
+> ⚠️ O agente **não deve corrigir a spec automaticamente** sem o usuário indicar quais ajustes aceita. A decisão é sempre do usuário.

@@ -10,4 +10,6 @@ Aplique o checklist da skill `spec-review` e apresente:
 2. Sugestões de melhoria
 3. Veredicto: APROVADO para execução ou REQUER AJUSTES
 
+Se REQUER AJUSTES: aguarde o usuário indicar quais ajustes aceita, corrija o JSON da spec existente (não crie uma nova), apresente as mudanças e aguarde nova aprovação.
+
 $ARGUMENTS

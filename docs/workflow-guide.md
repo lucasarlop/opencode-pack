@@ -53,6 +53,14 @@ O agente avalia a spec contra o checklist:
 - Dependências Docker/serviços verificadas
 - Rollback definido nos steps críticos
 
+O veredicto será **APROVADO** ou **REQUER AJUSTES**.
+
+Se REQUER AJUSTES:
+1. O agente lista os problemas e sugestões.
+2. Você indica quais ajustes aceita.
+3. O agente corrige o JSON da spec existente (não cria uma nova).
+4. Apresenta as mudanças e aguarda nova aprovação.
+
 ### 3. Aprovar
 
 Após revisar, diga explicitamente:
@@ -103,6 +111,12 @@ sequenceDiagram
   OC->>Agent: Injeta prompt com checklist de spec-review
   Agent->>FS: Lê a spec mais recente com status "planned"
   Agent-->>Dev: Avaliação: APROVADO ou REQUER AJUSTES
+
+  alt REQUER AJUSTES
+    Dev-->>Agent: Indica quais ajustes aceita
+    Agent->>FS: Corrige o JSON da spec existente
+    Agent-->>Dev: Apresenta mudanças e aguarda nova aprovação
+  end
 
   Dev-->>Agent: "Aprovado. Pode executar."
 
