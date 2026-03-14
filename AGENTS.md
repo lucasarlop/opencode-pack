@@ -8,6 +8,12 @@
   - NÃO altere caminhos como .opencode/, são convenções do projeto
 -->
 
+> **ATENÇÃO:** Este projeto utiliza **exclusivamente** o diretório `.opencode/` para
+> regras, specs, templates, commands e skills. NÃO procure nem crie arquivos em
+> `.claude/`, `.cursor/`, `.copilot/`, `.github/copilot-instructions.md` ou qualquer
+> outro diretório específico de ferramenta. Toda a configuração do agente está em
+> `.opencode/` e no presente arquivo.
+
 ---
 
 Propósito
@@ -114,7 +120,12 @@ Consulte a skill `tdd` para o protocolo completo.
 
 ## 8. Layout dos Fontes [PREENCHER]
 
-<!-- /init: liste os diretórios principais do projeto -->
+<!-- /init: liste os diretórios principais como lista simples (caminho: descrição).
+     Formato esperado (NÃO gere árvore de diretórios):
+     - src/main/java: código-fonte principal
+     - src/test/java: testes
+     - .opencode/specs: especificações de tarefas
+-->
 
 ---
 
