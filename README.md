@@ -177,25 +177,6 @@ bash /caminho/para/opencode-pack/install.sh --force
 ```
 
 ---
-
-## Criando o repositório
-
-```bash
-cd opencode-pack
-
-git init
-git add .
-git commit -m "feat: opencode bootstrap pack v1.0.0"
-
-# GitHub CLI
-gh repo create opencode-pack --public --source=. --push
-
-# ou manual
-git remote add origin https://github.com/lucasarlop/opencode-pack.git
-git branch -M main
-git push -u origin main
-```
-
 Para instalar em qualquer projeto a partir do repo:
 
 ```bash
@@ -203,6 +184,6 @@ Para instalar em qualquer projeto a partir do repo:
 git clone https://github.com/lucasarlop/opencode-pack.git /tmp/opencode-pack
 bash /tmp/opencode-pack/install.sh
 
-# Ou one-liner (após o repo estar público)
+# Ou one-liner
 bash <(curl -s https://raw.githubusercontent.com/lucasarlop/opencode-pack/main/install.sh)
 ```
