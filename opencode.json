@@ -4,5 +4,15 @@
     ".opencode/rules/*.md",
     ".opencode/specs/*.json",
     ".opencode/docs/**/*"
-  ]
+  ],
+  "agent": {
+    "plan": {
+      "permission": {
+        "edit": {
+          "*": "deny",
+          ".opencode/specs/*": "allow"
+        }
+      }
+    }
+  }
 }

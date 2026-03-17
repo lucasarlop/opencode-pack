@@ -13,6 +13,7 @@ Siga obrigatoriamente o protocolo em `.opencode/rules/planning.md`:
 1. Analise o código relevante
 2. Identifique o próximo `task_id` sequencial em `.opencode/specs/`
 3. **Crie o arquivo** `.opencode/specs/NNNN_<nome>.json` usando `.opencode/templates/spec_template.json`
+   ⛔ NUNCA crie em qualquer diretório diferente de `.opencode/specs/` — apenas esse caminho é usado para as specs.
 4. Após salvar o arquivo, apresente o plano de forma legível informando o caminho do arquivo criado
 
 ⚠️ OBRIGATÓRIO: O arquivo JSON deve ser criado antes de apresentar o plano.

@@ -24,7 +24,7 @@ Sempre que o usuário solicitar uma nova funcionalidade, refatoração ou corre�
     *   **Pensamento Crítico:** Preencha o campo `reasoning` em cada passo para detalhar a lógica.
     *   **Critérios de Sucesso:** Defina claramente a `definition_of_done` no JSON.
     *   ⚠️ Apresentar o plano em texto sem criar o arquivo JSON **é uma violação do protocolo**.
-    *   **Permissão de escrita:** O modo PLAN exige que você **escreva** o arquivo da spec em `.opencode/specs/`. Se a ferramenta pedir permissão para escrever arquivos, conceda (ou configure) permissão para criar/editar arquivos em `.opencode/specs/`. Sem isso o protocolo não pode ser cumprido.
+    *   **Permissão de escrita:** O modo PLAN tem permissão para **escrever exclusivamente** em `.opencode/specs/NNNN_<nome>.json`. Esta permissão já está pré-configurada no `opencode.json` do pack. O diretório `.opencode/plans/` **não existe** e **nunca deve ser usado** — specs criadas fora de `.opencode/specs/` serão ignoradas pelo protocolo.
 4.  **Validação:** Apresente o plano ao usuário. A execução só deve avançar após aprovação explícita.
     *   Se o usuário solicitar `/spec-review` e o veredicto for **REQUER AJUSTES**: corrija o JSON da spec existente (não crie uma nova), apresente as mudanças e aguarde nova aprovação.
 
