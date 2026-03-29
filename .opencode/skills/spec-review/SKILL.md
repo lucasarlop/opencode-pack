@@ -20,7 +20,8 @@ Avalio uma spec JSON e aponto problemas antes da execução.
 - [ ] Cada step tem `reasoning` preenchido com justificativa real
 - [ ] Steps têm `dependencies` corretas (sem ciclos)
 - [ ] Nenhum step é genérico demais (ex: "melhorar o código")
-- [ ] Máximo de 7-8 steps — se mais, sugerir quebrar em specs menores
+- [ ] Máximo de 4-5 steps — se mais, sugerir quebrar em specs menores
+- [ ] `reasoning` de cada step justifica por que a abordagem não é desnecessariamente complexa (Princípio da Simplicidade)
 
 ### Ambiente
 - [ ] `docker.required_services` preenchido se há dependências de serviços
