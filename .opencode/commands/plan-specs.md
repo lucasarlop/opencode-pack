@@ -14,6 +14,8 @@ Crie um conjunto de specs para a seguinte feature ou tarefa:
 - Cada spec deve ser atômica: executável de forma independente ou com dependências explícitas entre specs.
 - 4 a 5 steps por spec, com duração estimada de ~5 minutos cada.
 - Se um step parecer longo demais, quebre em outra spec.
+- **Simplicidade primeiro:** prefira o mínimo de specs necessário — não fragmente se uma spec bem estruturada for suficiente.
+- Em cada spec, a solução mais simples é a padrão; complexidade deve ser justificada no `reasoning`.
 
 ## Fluxo obrigatório
 
@@ -27,6 +29,7 @@ Divida a feature em unidades de trabalho. Para cada unidade, avalie:
 - É independente ou depende de outra unidade? (defina `dependencies` entre specs quando necessário)
 - Cabe em 4-5 steps de ~5min?
 - Tem critério de verificação claro?
+- **A abordagem proposta é a mais simples que atende ao requisito?** Existe alternativa mais direta usando o que já existe no projeto?
 
 ### 3. Numeração sequencial
 
@@ -38,6 +41,7 @@ Crie todos os arquivos JSON em `.opencode/specs/` usando o template em `.opencod
 
 Requisitos de qualidade para cada spec:
 - `reasoning` específico em cada step — não genérico
+- `reasoning` justifica por que a abordagem não é desnecessariamente complexa
 - `definition_of_done` verificável
 - `tdd_required` declarado explicitamente
 - `rollback` em steps que modificam arquivos críticos

@@ -10,7 +10,8 @@ Você está em modo de **brainstorming** para o seguinte tópico:
 
 ## Filosofia
 
-- Simplicidade é a diretriz central — questione se há uma solução mais simples antes de complexificar.
+- Explore livremente, incluindo abordagens complexas — o objetivo é pensar junto sem restrições prematuras.
+- A busca por soluções simples será exigida na fase de spec e execução; aqui, o espaço é de exploração.
 - Explore alternativas antes de convergir para uma solução.
 - Desafie premissas construtivamente.
 - Não existe resposta certa aqui: o objetivo é pensar junto.

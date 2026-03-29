@@ -12,10 +12,12 @@ Usando a última spec, realize a implementação. Siga o protocolo em `.opencode
 3. Execute os steps do `execution_plan` em ordem, respeitando `dependencies`
 4. Ao concluir cada step, verifique o critério em `verification`
 5. Se um step falhar, **pare e informe** — não improvise soluções fora do escopo da spec
-6. Ao finalizar, atualize `outcome.summary`, `generated_artifacts` e `status: "completed"`
-7. Notifique o usuário executando `.opencode/commands/notify.sh "<título da spec>"`
+6. Se durante a implementação perceber que a abordagem está mais complexa do que o necessário, **pare e avalie**: existe uma implementação mais simples que atenda ao mesmo critério de verificação? Se sim, proponha o ajuste antes de continuar.
+7. Ao finalizar, atualize `outcome.summary`, `generated_artifacts` e `status: "completed"`
+8. Notifique o usuário executando `.opencode/commands/notify.sh "<título da spec>"`
 
 $ARGUMENTS
 
 ⚠️ Não modifique arquivos fora do escopo da spec.
 Se encontrar necessidade de mudanças não previstas, pare e proponha uma nova spec.
+Se encontrar uma solução mais simples não prevista na spec, pare e proponha a simplificação antes de implementar.

@@ -11,10 +11,11 @@ Inicie o protocolo Spec-First para a seguinte solicitação:
 
 Siga obrigatoriamente o protocolo em `.opencode/rules/planning.md`:
 1. Analise o código relevante
-2. Identifique o próximo `task_id` sequencial em `.opencode/specs/`
-3. **Crie o arquivo** `.opencode/specs/NNNN_<nome>.json` usando `.opencode/templates/spec_template.json`
+2. **Princípio da Simplicidade:** antes de planejar, responda: _existe uma solução mais simples que atenda ao requisito?_ Se sim, use-a. Prefira modificar arquivos existentes a criar novos. Prefira o que já existe no projeto a introduzir dependências novas. Complexidade adicional deve ser justificada no campo `reasoning` de cada step.
+3. Identifique o próximo `task_id` sequencial em `.opencode/specs/`
+4. **Crie o arquivo** `.opencode/specs/NNNN_<nome>.json` usando `.opencode/templates/spec_template.json`
    ⛔ NUNCA crie em qualquer diretório diferente de `.opencode/specs/` — apenas esse caminho é usado para as specs.
-4. Após salvar o arquivo, apresente o plano de forma legível informando o caminho do arquivo criado
+5. Após salvar o arquivo, apresente o plano de forma legível informando o caminho do arquivo criado
 
 ⚠️ OBRIGATÓRIO: O arquivo JSON deve ser criado antes de apresentar o plano.
 Apresentar o plano em texto sem criar o arquivo é uma violação do protocolo. Não faça isso.

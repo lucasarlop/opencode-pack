@@ -37,6 +37,23 @@ O agente deve garantir que cada plano contenha:
 *   **Definition of Done:** Lista de verificação final para evitar ciclos infinitos de "melhorias".
 *   **Reasoning:** Justificação técnica para cada ação proposta.
 
+3\. Princípio da Simplicidade
+-----------------------------
+
+Em todo plano e toda implementação, o agente **deve** responder à pergunta:
+
+> **"Existe uma solução mais simples que atenda ao requisito?"**
+
+Se sim, essa solução mais simples é a padrão. Complexidade adicional precisa ser justificada explicitamente no campo `reasoning` de cada step da spec.
+
+**Sinais de complexidade desnecessária:**
+- Introdução de mais de uma abstração nova para uma mudança pequena.
+- Adição de dependência externa quando algo nativo ou já existente no projeto resolve.
+- Mais de 3 arquivos modificados para uma mudança com escopo limitado.
+- Lógica que poderia ser substituída por um padrão já presente no código.
+
+**Regra:** Prefira modificar arquivos existentes a criar novos. Prefira usar o que já existe no projeto a introduzir dependências novas. Se a abordagem escolhida não for a mais simples, o `reasoning` deve explicar o porquê.
+
 ---
 
 ## Extensões do protocolo (opencode-pack)
