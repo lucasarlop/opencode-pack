@@ -23,6 +23,8 @@ opencode-pack/
     │   ├── new-spec.md              # /new-spec — inicia planejamento
     │   ├── execute.md               # /execute — executa spec aprovada + notifica
     │   ├── spec-review.md           # /spec-review — valida spec antes de executar
+    │   ├── brainstorming.md         # /brainstorming — discussão de ideias e exploração
+    │   ├── plan-specs.md            # /plan-specs — decomposição em múltiplas specs
     │   └── notify.sh                # Script: notify-send + Telegram (chamado pelo /execute)
     └── skills/
         ├── tdd/                     # Protocolo TDD com pytest
@@ -66,8 +68,14 @@ opencode
 # 2. Enriqueça o AGENTS.md com contexto real do projeto
 /init
 
+# (opcional) Discuta ideias antes de planejar
+/brainstorming <tópico ou questão>
+
 # 3. Crie sua primeira spec
 /new-spec Implementar autenticação JWT
+
+# Para features maiores (múltiplas specs):
+/plan-specs Autenticação completa com JWT e refresh token
 
 # 4. Revise antes de executar
 /spec-review
@@ -83,6 +91,8 @@ opencode
 Todo trabalho segue três fases:
 
 **1. PLAN** — o agente analisa, cria a spec em `.opencode/specs/NNNN_nome.json` e apresenta o plano. Nenhum código é modificado nesta fase.
+
+Use `/new-spec` para tarefas simples (uma spec). Use `/plan-specs` para features maiores que precisam de decomposição em múltiplas specs.
 
 **2. Revisão** — você lê, ajusta se necessário, e aprova explicitamente.
 
@@ -134,6 +144,7 @@ Para obter o chat_id: envie uma mensagem ao bot e acesse:
 | `.opencode/commands/` | ✅ commita |
 | `.opencode/skills/` | ✅ commita |
 | `.opencode/docs/adr/` | ✅ commita |
+| `.opencode/docs/brainstorming/` | ✅ commita |
 | `docs/diagrams/` | ✅ commita |
 | `.opencode/specs/` | ❌ `.gitignore` |
 | `.env` | ❌ `.gitignore` |

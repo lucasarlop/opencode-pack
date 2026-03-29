@@ -77,9 +77,11 @@ chmod +x "$TARGET_DIR/.opencode/commands/notify.sh" 2>/dev/null || true
 # Diretórios vazios necessários
 mkdir -p "$TARGET_DIR/.opencode/specs"
 mkdir -p "$TARGET_DIR/.opencode/docs/adr"
+mkdir -p "$TARGET_DIR/.opencode/docs/brainstorming"
 mkdir -p "$TARGET_DIR/docs/diagrams"
 touch "$TARGET_DIR/.opencode/specs/.gitkeep"
 touch "$TARGET_DIR/.opencode/docs/adr/.gitkeep"
+touch "$TARGET_DIR/.opencode/docs/brainstorming/.gitkeep"
 touch "$TARGET_DIR/docs/diagrams/.gitkeep"
 
 # Registra versão instalada no projeto
@@ -110,9 +112,10 @@ echo "  AGENTS.md                        ← contexto global do projeto"
 echo "  opencode.json                    ← carrega rules, specs e docs automaticamente"
 echo "  .opencode/rules/planning.md      ← protocolo Spec-First"
 echo "  .opencode/templates/             ← template de spec v2.1"
-echo "  .opencode/commands/              ← /new-spec, /execute, /spec-review"
+echo "  .opencode/commands/              ← /new-spec, /execute, /spec-review, /brainstorming, /plan-specs"
 echo "  .opencode/skills/                ← tdd, python-docker, diagrams, ..."
 echo "  .opencode/docs/adr/              ← ADRs (commitado)"
+echo "  .opencode/docs/brainstorming/    ← notas de brainstorming (commitado)"
 echo "  .opencode/specs/                 ← specs de trabalho (.gitignore)"
 echo "  docs/diagrams/                   ← diagramas C4 + sequência (commitado)"
 echo "  .opencode/.pack-version          ← versão do pack instalada"

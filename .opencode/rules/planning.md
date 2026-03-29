@@ -24,7 +24,7 @@ Sempre que o usuário solicitar uma nova funcionalidade, refatoração ou corre�
     *   **Pensamento Crítico:** Preencha o campo `reasoning` em cada passo para detalhar a lógica.
     *   **Critérios de Sucesso:** Defina claramente a `definition_of_done` no JSON.
     *   ⚠️ Apresentar o plano em texto sem criar o arquivo JSON **é uma violação do protocolo**.
-    *   **Permissão de escrita:** O modo PLAN tem permissão para **escrever exclusivamente** em `.opencode/specs/NNNN_<nome>.json`. Esta permissão já está pré-configurada no `opencode.json` do pack. O diretório `.opencode/plans/` **não existe** e **nunca deve ser usado** — specs criadas fora de `.opencode/specs/` serão ignoradas pelo protocolo.
+    *   **Permissão de escrita:** O modo PLAN tem permissão para escrever em `.opencode/specs/NNNN_<nome>.json` e em `.opencode/docs/*` (para notas de brainstorming e ADRs). Esta permissão já está pré-configurada no `opencode.json` do pack. O diretório `.opencode/plans/` **não existe** e **nunca deve ser usado** — specs criadas fora de `.opencode/specs/` serão ignoradas pelo protocolo.
 4.  **Validação:** Apresente o plano ao usuário. A execução só deve avançar após aprovação explícita.
     *   Se o usuário solicitar `/spec-review` e o veredicto for **REQUER AJUSTES**: corrija o JSON da spec existente (não crie uma nova), apresente as mudanças e aguarde nova aprovação.
 
@@ -85,7 +85,8 @@ O que foi descartado e por quê.
 ### O que NÃO fazer no planejamento
 
 - Não criar steps genéricos como "melhorar o código" sem ação específica.
-- Não planejar mais de 7-8 steps por spec — quebre em specs menores.
+- Não planejar mais de 4-5 steps por spec — quebre em specs menores.
+- Cada spec deve ter duração estimada de ~5 minutos — se um step parecer longo, quebre em outra spec.
 - Não assumir que o ambiente está configurado — verifique.
 - Não incluir refatorações não solicitadas no plano.
 

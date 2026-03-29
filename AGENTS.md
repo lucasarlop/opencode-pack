@@ -34,7 +34,8 @@ Regras detalhadas estão em `.opencode/rules/planning.md`.
    - **Rascunho da Spec**: Crie um novo arquivo de especificação em `.opencode/specs/NNNN_<nome_da_tarefa>.json`.
    - **Template**: Utilize estritamente o modelo localizado em `.opencode/templates/spec_template.json`.
    - **Restrição**: **NÃO** modifique nenhum código-fonte enquanto estiver nesta fase. Sua saída deve ser apenas o plano.
-   - ⚠️ Apresentar o plano apenas em texto **sem criar o arquivo JSON é uma violação do protocolo**.
+    - ⚠️ Apresentar o plano apenas em texto **sem criar o arquivo JSON é uma violação do protocolo**.
+    - **Limite**: Máximo 4-5 steps por spec; cada spec deve ter duração estimada de ~5 minutos — quebre em specs menores se necessário.
 2. **Revisão**: Apresente o plano ao usuário para confirmação. Aguarde aprovação explícita antes de avançar.
 3. **Modo BUILD (Fase de Execução)**:
    - **Executar**: Somente após aprovação, execute os passos do plano utilizando o comando `/execute` ou chamadas manuais de ferramentas.

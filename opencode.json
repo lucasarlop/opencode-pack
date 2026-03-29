@@ -10,7 +10,8 @@
       "permission": {
         "edit": {
           "*": "deny",
-          ".opencode/specs/*": "allow"
+          ".opencode/specs/*": "allow",
+          ".opencode/docs/*": "allow"
         }
       }
     }
