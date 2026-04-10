@@ -85,6 +85,18 @@ copy() {
   echo "  ok: $dst"
 }
 
+ensure_gitignore_line() {
+  # Garante uma linha no .gitignore do TARGET, sem duplicar, sem apagar o que já existe
+  local line="$1"
+  local file="$TARGET/.gitignore"
+  if [ "$DRY_RUN" = "1" ]; then
+    echo "  would ensure in .gitignore: $line"
+    return
+  fi
+  touch "$file"
+  grep -qxF "$line" "$file" || echo "$line" >> "$file"
+}
+
 # ---------- setup de máquina (primeira vez) ----------
 
 machine_setup() {
@@ -184,6 +196,12 @@ if [ "$DRY_RUN" != "1" ]; then
   mkdir -p "$TARGET/.opencode/specs"
   echo "  ok: .opencode/specs/"
 
+  # Garante entradas do pack no .gitignore do projeto-alvo (append-only, preserva o que já existe)
+  ensure_gitignore_line ".opencode/specs/"
+  ensure_gitignore_line ".opencode/.pack-version"
+  ensure_gitignore_line ".env"
+  echo "  ok: .gitignore atualizado (append-only)"
+  
   if [ -n "$VAULT_SLUG" ]; then
     echo "$VAULT_SLUG" > "$TARGET/.vault-link"
     echo "  ok: .vault-link ($VAULT_SLUG)"

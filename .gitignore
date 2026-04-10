@@ -1,9 +1,9 @@
-.env
-.opencode/specs/
-.opencode/.pack-version
+# Desenvolvimento do próprio pack
 .opencode/node_modules/
 .opencode/bun.lock
-__pycache__/
-*.pyc
-.venv/
+.opencode/package.json
+.opencode/specs/
+.opencode/.pack-version
 node_modules/
+*.log
+.env
