@@ -1,18 +1,41 @@
 {
   "$schema": "https://opencode.ai/config.json",
-  "instructions": [
-    ".opencode/rules/*.md",
-    ".opencode/specs/*.json",
-    ".opencode/docs/**/*"
-  ],
+  "instructions": ["AGENTS.md"],
   "agent": {
-    "plan": {
+    "spec-writer": {
+      "description": "Planeja e escreve specs. Não modifica código do projeto.",
+      "mode": "primary",
+      "prompt": "{file:./.opencode/agents/spec-writer.md}",
+      "tools": {
+        "write": true,
+        "edit": true,
+        "read": true,
+        "bash": false,
+        "glob": true,
+        "grep": true
+      },
       "permission": {
+        "write": {
+          ".opencode/specs/**": "allow",
+          "*": "deny"
+        },
         "edit": {
-          "*": "deny",
-          ".opencode/specs/*": "allow",
-          ".opencode/docs/*": "allow"
+          ".opencode/specs/**": "allow",
+          "*": "deny"
         }
+      }
+    },
+    "spec-executor": {
+      "description": "Executa uma spec aprovada. Implementa código, roda testes, registra outcome.",
+      "mode": "primary",
+      "prompt": "{file:./.opencode/agents/spec-executor.md}",
+      "tools": {
+        "write": true,
+        "edit": true,
+        "read": true,
+        "bash": true,
+        "glob": true,
+        "grep": true
       }
     }
   }

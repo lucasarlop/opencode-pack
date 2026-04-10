@@ -1,129 +1,209 @@
 #!/usr/bin/env bash
-# install.sh
-# Instala o opencode-pack no projeto atual
-#
-# Uso direto (repo clonado):
-#   bash install.sh [caminho/do/projeto] [--force]
-#
-# Uso remoto (one-liner):
-#   bash <(curl -s https://raw.githubusercontent.com/lucasarlop/opencode-pack/main/install.sh)
-#   → clona automaticamente e instala no diretório atual
-
+# install.sh — instala opencode-pack num projeto
+# Setup interativo na primeira vez; reusa config de máquina nas próximas.
 set -euo pipefail
 
-REPO_URL="https://github.com/lucasarlop/opencode-pack.git"
-TARGET_DIR="$(pwd)"
-FORCE=false
+PRESET=""
+DRY_RUN=0
+FORCE=0
+NON_INTERACTIVE=0
+VAULT_SLUG=""
 
 for arg in "$@"; do
-  case $arg in
-    --force) FORCE=true ;;
-    -*) ;;
-    *) TARGET_DIR="$arg" ;;
+  case "$arg" in
+    --preset=*)        PRESET="${arg#*=}" ;;
+    --vault-slug=*)    VAULT_SLUG="${arg#*=}" ;;
+    --dry-run)         DRY_RUN=1 ;;
+    --force)           FORCE=1 ;;
+    --non-interactive) NON_INTERACTIVE=1 ;;
+    -h|--help)
+      cat <<EOF
+opencode-pack install
+
+Uso:
+  bash install.sh [opções]
+
+Opções:
+  --preset=python|node|generic   stack do projeto (default pergunta)
+  --vault-slug=SLUG              slug deste projeto no vault (default pergunta)
+  --non-interactive              não pergunta nada, usa defaults
+  --force                        sobrescreve arquivos existentes sem perguntar
+  --dry-run                      mostra o que faria, não escreve
+
+Config de máquina: ~/.config/opencode-pack/config
+  criada na primeira instalação e reusada nas próximas.
+EOF
+      exit 0 ;;
   esac
 done
 
-# Detecta se está rodando via pipe/curl (BASH_SOURCE[0] não é um arquivo real)
-PACK_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-if [[ "$PACK_DIR" == /proc/* ]] || [[ ! -f "$PACK_DIR/VERSION" ]]; then
-  echo "opencode-pack — modo remoto detectado, clonando repositório..."
-  TMP_DIR="$(mktemp -d)"
-  trap 'rm -rf "$TMP_DIR"' EXIT
-  git clone --depth=1 "$REPO_URL" "$TMP_DIR" --quiet
-  PACK_DIR="$TMP_DIR"
-  echo "✓ Repositório clonado"
-  echo ""
-fi
+PACK_DIR="$(cd "$(dirname "$0")" && pwd)"
+TARGET="$(pwd)"
+CFG_DIR="$HOME/.config/opencode-pack"
+CFG_FILE="$CFG_DIR/config"
 
-PACK_VERSION="$(cat "$PACK_DIR/VERSION" 2>/dev/null || echo "unknown")"
+# ---------- helpers ----------
 
-echo "opencode-pack v$PACK_VERSION — instalando em: $TARGET_DIR"
-echo ""
-
-copy_file() {
-  local src="$1"
-  local dst="$2"
-  mkdir -p "$(dirname "$dst")"
-  if [ -f "$dst" ] && [ "$FORCE" = false ]; then
-    read -r -p "  $dst já existe. Sobrescrever? [s/N] " resp
-    if [[ ! "$resp" =~ ^[Ss]$ ]]; then
-      echo "  → ignorado"
-      return
-    fi
+ask() {
+  # ask "pergunta" "default" -> ecoa resposta
+  local prompt="$1" default="${2:-}" ans
+  if [ "$NON_INTERACTIVE" = "1" ]; then
+    echo "$default"
+    return
   fi
-  cp "$src" "$dst"
-  echo "  ✓ $dst"
+  if [ -n "$default" ]; then
+    read -r -p "  $prompt [$default]: " ans
+    echo "${ans:-$default}"
+  else
+    read -r -p "  $prompt: " ans
+    echo "$ans"
+  fi
 }
 
-# AGENTS.md (raiz)
-if [ ! -f "$TARGET_DIR/AGENTS.md" ]; then
-  copy_file "$PACK_DIR/AGENTS.md" "$TARGET_DIR/AGENTS.md"
-else
-  echo "  → AGENTS.md já existe — preservando (rode /init para enriquecer)"
-fi
+ask_yn() {
+  local prompt="$1" default="${2:-n}" ans
+  if [ "$NON_INTERACTIVE" = "1" ]; then
+    [ "$default" = "y" ] && return 0 || return 1
+  fi
+  read -r -p "  $prompt [${default^^}/$([ "$default" = "y" ] && echo n || echo y)]: " ans
+  ans="${ans:-$default}"
+  [[ "$ans" =~ ^[yY] ]]
+}
 
-# opencode.json
-copy_file "$PACK_DIR/opencode.json" "$TARGET_DIR/opencode.json"
-
-# .opencode/ — estrutura completa
-for src_file in $(find "$PACK_DIR/.opencode" -type f); do
-  rel="${src_file#$PACK_DIR/}"
-  dst="$TARGET_DIR/$rel"
-  copy_file "$src_file" "$dst"
-done
-
-chmod +x "$TARGET_DIR/.opencode/commands/notify.sh" 2>/dev/null || true
-
-# Diretórios vazios necessários
-mkdir -p "$TARGET_DIR/.opencode/specs"
-mkdir -p "$TARGET_DIR/.opencode/docs/adr"
-mkdir -p "$TARGET_DIR/.opencode/docs/brainstorming"
-mkdir -p "$TARGET_DIR/docs/diagrams"
-touch "$TARGET_DIR/.opencode/specs/.gitkeep"
-touch "$TARGET_DIR/.opencode/docs/adr/.gitkeep"
-touch "$TARGET_DIR/.opencode/docs/brainstorming/.gitkeep"
-touch "$TARGET_DIR/docs/diagrams/.gitkeep"
-
-# Registra versão instalada no projeto
-echo "$PACK_VERSION" > "$TARGET_DIR/.opencode/.pack-version"
-echo "  ✓ .opencode/.pack-version ($PACK_VERSION)"
-
-# .gitignore — merge se já existir, cria se não existir
-GITIGNORE="$TARGET_DIR/.gitignore"
-PACK_GITIGNORE="$PACK_DIR/.gitignore"
-if [ -f "$GITIGNORE" ]; then
-  while IFS= read -r line; do
-    if [[ -n "$line" && "$line" != \#* ]]; then
-      if ! grep -qxF "$line" "$GITIGNORE"; then
-        echo "$line" >> "$GITIGNORE"
-      fi
+copy() {
+  local src="$1" dst="$2"
+  if [ "$DRY_RUN" = "1" ]; then
+    echo "  would copy: $dst"; return
+  fi
+  if [ -e "$dst" ] && [ "$FORCE" != "1" ]; then
+    if ! ask_yn "$dst já existe. Sobrescrever?" "n"; then
+      echo "  skip: $dst"; return
     fi
-  done < "$PACK_GITIGNORE"
-  echo "  ✓ .gitignore atualizado"
-else
-  copy_file "$PACK_GITIGNORE" "$GITIGNORE"
+  fi
+  mkdir -p "$(dirname "$dst")"
+  cp -r "$src" "$dst"
+  echo "  ok: $dst"
+}
+
+# ---------- setup de máquina (primeira vez) ----------
+
+machine_setup() {
+  echo
+  echo "Primeira instalação nesta máquina. Vou fazer algumas perguntas (uma vez só)."
+  echo
+
+  local use_vault vault_root tg_token tg_chat
+
+  if ask_yn "Integrar com um vault pessoal de notas (git repo com markdown)?" "y"; then
+    use_vault="true"
+    vault_root="$(ask "Caminho local do vault" "$HOME/workspace/vault")"
+  else
+    use_vault="false"
+    vault_root=""
+  fi
+
+  if ask_yn "Configurar Telegram para /notify agora? (pode deixar pra depois)" "n"; then
+    tg_token="$(ask "Telegram bot token" "")"
+    tg_chat="$(ask "Telegram chat id" "")"
+  else
+    tg_token=""
+    tg_chat=""
+  fi
+
+  if [ "$DRY_RUN" != "1" ]; then
+    mkdir -p "$CFG_DIR"
+    cat > "$CFG_FILE" <<EOF
+# opencode-pack machine config
+# Gerado por install.sh em $(date -Iseconds)
+USE_VAULT=$use_vault
+VAULT_ROOT=$vault_root
+TELEGRAM_BOT_TOKEN=$tg_token
+TELEGRAM_CHAT_ID=$tg_chat
+EOF
+    echo
+    echo "  ok: $CFG_FILE"
+  else
+    echo "  would write: $CFG_FILE"
+  fi
+}
+
+# ---------- main ----------
+
+echo "opencode-pack installer"
+echo "  source : $PACK_DIR"
+echo "  target : $TARGET"
+[ "$DRY_RUN" = "1" ]         && echo "  MODE   : dry-run"
+[ "$NON_INTERACTIVE" = "1" ] && echo "  MODE   : non-interactive"
+
+# Carrega ou cria config de máquina
+if [ ! -f "$CFG_FILE" ]; then
+  machine_setup
 fi
 
-echo ""
-echo "✓ opencode-pack v$PACK_VERSION instalado com sucesso!"
-echo ""
-echo "Estrutura criada:"
-echo "  AGENTS.md                        ← contexto global do projeto"
-echo "  opencode.json                    ← carrega rules, specs e docs automaticamente"
-echo "  .opencode/rules/planning.md      ← protocolo Spec-First"
-echo "  .opencode/templates/             ← template de spec v2.1"
-echo "  .opencode/commands/              ← /new-spec, /execute, /spec-review, /brainstorming, /plan-specs"
-echo "  .opencode/skills/                ← tdd, python-docker, diagrams, ..."
-echo "  .opencode/docs/adr/              ← ADRs (commitado)"
-echo "  .opencode/docs/brainstorming/    ← notas de brainstorming (commitado)"
-echo "  .opencode/specs/                 ← specs de trabalho (.gitignore)"
-echo "  docs/diagrams/                   ← diagramas C4 + sequência (commitado)"
-echo "  .opencode/.pack-version          ← versão do pack instalada"
-echo ""
+# shellcheck disable=SC1090
+[ -f "$CFG_FILE" ] && . "$CFG_FILE"
+
+# ---------- perguntas de projeto ----------
+
+echo
+echo "Setup deste projeto:"
+
+if [ -z "$PRESET" ]; then
+  PRESET="$(ask "Preset de stack (python/node/generic)" "generic")"
+fi
+echo "  preset : $PRESET"
+
+if [ "${USE_VAULT:-false}" = "true" ] && [ -z "$VAULT_SLUG" ]; then
+  VAULT_SLUG="$(ask "Slug deste projeto no vault (vazio = linkar depois)" "")"
+fi
+
+# ---------- copy ----------
+
+echo
+echo "Copiando arquivos:"
+copy "$PACK_DIR/AGENTS.md"              "$TARGET/AGENTS.md"
+copy "$PACK_DIR/opencode.json"          "$TARGET/opencode.json"
+copy "$PACK_DIR/.opencode/rules"        "$TARGET/.opencode/rules"
+copy "$PACK_DIR/.opencode/templates"    "$TARGET/.opencode/templates"
+copy "$PACK_DIR/.opencode/commands"     "$TARGET/.opencode/commands"
+copy "$PACK_DIR/.opencode/agents"       "$TARGET/.opencode/agents"
+copy "$PACK_DIR/.opencode/skills/utils" "$TARGET/.opencode/skills/utils"
+
+case "$PRESET" in
+  python)
+    copy "$PACK_DIR/.opencode/skills/python" "$TARGET/.opencode/skills/python" ;;
+  node)
+    echo "  preset node: nenhuma skill ainda (placeholder)" ;;
+  generic)
+    echo "  preset generic: sem skills de stack" ;;
+  *)
+    echo "  preset desconhecido: $PRESET" >&2; exit 1 ;;
+esac
+
+if [ "$DRY_RUN" != "1" ]; then
+  mkdir -p "$TARGET/.opencode/specs"
+  echo "  ok: .opencode/specs/"
+
+  if [ -n "$VAULT_SLUG" ]; then
+    echo "$VAULT_SLUG" > "$TARGET/.vault-link"
+    echo "  ok: .vault-link ($VAULT_SLUG)"
+  fi
+
+  [ -f "$PACK_DIR/VERSION" ] && cp "$PACK_DIR/VERSION" "$TARGET/.opencode/.pack-version"
+fi
+
+# ---------- fim ----------
+
+echo
+echo "Pronto."
+echo
 echo "Próximos passos:"
-echo "  1. opencode                      ← abre o agente"
-echo "  2. /init                         ← enriquece AGENTS.md com contexto do projeto"
-echo "  3. /new-spec <descrição>         ← cria a primeira spec"
-echo "  4. (opcional) adicione ao .env:"
-echo "       TELEGRAM_BOT_TOKEN=..."
-echo "       TELEGRAM_CHAT_ID=..."
+echo "  1. opencode"
+echo "  2. /init                              (preenche AGENTS.md)"
+if [ "${USE_VAULT:-false}" = "true" ] && [ -z "$VAULT_SLUG" ]; then
+echo "  3. /vault-link <slug>                 (linka ao vault)"
+echo "  4. /vault-sync                        (sincroniza vault)"
+echo "  5. /new-spec <descrição>              (cria primeira spec)"
+else
+echo "  3. /new-spec <descrição>              (cria primeira spec)"
+fi

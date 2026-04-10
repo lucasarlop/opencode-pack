@@ -1,35 +1,7 @@
-# OpenCode — specs são artefatos de trabalho, não documentação permanente
+.env
 .opencode/specs/
-
-# Ambiente Python
-.venv/
+.opencode/.pack-version
 __pycache__/
 *.pyc
-*.pyo
-*.pyd
-.Python
-*.egg-info/
-dist/
-build/
-.pytest_cache/
-.coverage
-htmlcov/
-.ruff_cache/
-
-# Variáveis de ambiente — nunca commitar
-.env
-.env.local
-.env.*.local
-
-# Docker
-.docker/
-
-# IDEs
-.vscode/
-.idea/
-*.swp
-*.swo
-
-# OS
-.DS_Store
-Thumbs.db
+.venv/
+node_modules/

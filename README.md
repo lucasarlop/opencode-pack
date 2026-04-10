@@ -1,200 +1,153 @@
 # opencode-pack
 
-Bootstrap para projetos com [OpenCode](https://opencode.ai) + Claude Code.
+Bootstrap mínimo para projetos com [OpenCode](https://opencode.ai).
 
-Implementa o protocolo **Spec-First** — toda tarefa começa com um plano aprovado antes de qualquer linha de código ser escrita.
-
----
-
-## O que está incluído
-
-```
-opencode-pack/
-├── AGENTS.md                        # Contexto global — lido pelo agente em toda sessão
-├── opencode.json                    # Carrega rules, specs e docs automaticamente
-├── .gitignore                       # Entradas para Python, Docker, .env e specs
-├── install.sh                       # Script de instalação
-└── .opencode/
-    ├── rules/
-    │   └── planning.md              # Protocolo Spec-First completo
-    ├── templates/
-    │   └── spec_template.json       # Template de spec v2.1
-    ├── commands/
-    │   ├── new-spec.md              # /new-spec — inicia planejamento
-    │   ├── execute.md               # /execute — executa spec aprovada + notifica
-    │   ├── spec-review.md           # /spec-review — valida spec antes de executar
-    │   ├── brainstorming.md         # /brainstorming — discussão de ideias e exploração
-    │   ├── plan-specs.md            # /plan-specs — decomposição em múltiplas specs
-    │   └── notify.sh                # Script: notify-send + Telegram (chamado pelo /execute)
-    └── skills/
-        ├── tdd/                     # Protocolo TDD com pytest
-        ├── python-docker/           # Boas práticas Python + Docker
-        ├── diagrams/                # C4 L1/L2 e sequência com Mermaid
-        ├── spec-review/             # Checklist de revisão de specs
-        └── notify/                  # Documentação da notificação automática
-```
-
-Após a instalação, o `install.sh` também cria:
-- `.opencode/specs/` — specs de trabalho (no `.gitignore`)
-- `.opencode/docs/adr/` — ADRs commitados
-- `docs/diagrams/` — diagramas C4 commitados
-
----
+Implementa o protocolo **Spec-First**: toda tarefa grande começa com uma spec aprovada antes de qualquer código. Tarefas pequenas seguem direto, sem cerimônia.
 
 ## Instalação
 
-```bash
-# Clone o pack
-git clone https://github.com/lucasarlop/opencode-pack.git
+> ⚠️ **Em validação.** Esta versão vive na branch `v2-rewrite`.
 
-# Entre no seu projeto
+```bash
+git clone -b v2-rewrite https://github.com/lucasarlop/opencode-pack.git /tmp/opencode-pack
 cd meu-projeto
-
-# Instale o pack
-bash /caminho/para/opencode-pack/install.sh
-
-# Ou com --force para sobrescrever sem perguntar
-bash /caminho/para/opencode-pack/install.sh --force
+bash /tmp/opencode-pack/install.sh
 ```
 
----
+O install é **interativo** na primeira vez em cada máquina. Ele pergunta:
 
-## Primeiros passos após instalar
+1. Se você quer integrar com um vault de notas (e o caminho).
+2. Se quer configurar Telegram para `/notify`.
+3. O preset de stack do projeto (`python` / `node` / `generic`).
+4. O slug deste projeto no vault (se vault ativado).
 
+As respostas 1 e 2 são salvas em `~/.config/opencode-pack/config` e reusadas nas próximas instalações. As respostas 3 e 4 são perguntadas a cada projeto.
+
+**Flags:**
+- `--non-interactive` — usa defaults, não pergunta nada
+- `--force` — sobrescreve arquivos existentes
+- `--dry-run` — mostra o que faria
+- `--preset=python|node|generic` — pula a pergunta de preset
+- `--vault-slug=SLUG` — pula a pergunta de slug
+
+Presets: `python`, `node`, `generic` (default).
+
+Flags:
+- `--dry-run` — mostra o que faria, não escreve.
+- `--force` — sobrescreve sem perguntar.
+
+## Comandos
+
+**Spec**
+| Comando | O que faz |
+|---|---|
+| `/new-spec <descrição>` | Cria spec em `.opencode/specs/NNNN-slug.md`. Não executa. |
+| `/exec-spec [NNNN]` | Executa spec aprovada. Sem argumento: menor NNNN em `draft`. |
+
+**Vault (opcional)**
+| Comando | O que faz |
+|---|---|
+| `/vault-link <slug>` | Cria `.vault-link` no projeto atual (configurado no install, mas pode rodar depois). |
+| `/vault-sync` | `git pull --rebase && git push` no vault. Rode manualmente no início/fim da sessão. |
+
+**Utilitários**
+| Comando | O que faz |
+|---|---|
+| `/notify <mensagem>` | Notifica via Telegram ou `notify-send`. |
+
+## Fluxo
+
+```
+1. /new-spec Adicionar endpoint de login
+   → spec-writer cria .opencode/specs/0001-adicionar-endpoint-de-login.md
+   → você lê, edita se quiser
+
+2. /exec-spec
+   → spec-executor pega a 0001, executa, registra outcome
+   → se .vault-link existir, loga no estado.md do vault
+
+3. /notify Login implementado
+```
+
+## Agentes customizados
+
+O pack define dois agentes em `opencode.json`:
+
+- **spec-writer** — planeja. Só escreve em `.opencode/specs/`. Sem bash.
+- **spec-executor** — executa. Escrita livre, bash liberado, registra tempo e outcome.
+
+Fora dos comandos, os agentes padrão do OpenCode seguem funcionando normalmente.
+
+## Vault sync (opcional)
+
+Integração com um vault pessoal de notas. Configurada no install na primeira vez; depois disso é transparente.
+
+Fluxo típico por sessão:
 ```bash
-# 1. Abra o OpenCode no projeto
-opencode
-
-# 2. Enriqueça o AGENTS.md com contexto real do projeto
-/init
-
-# (opcional) Discuta ideias antes de planejar
-/brainstorming <tópico ou questão>
-
-# 3. Crie sua primeira spec
-/new-spec Implementar autenticação JWT
-
-# Para features maiores (múltiplas specs):
-/plan-specs Autenticação completa com JWT e refresh token
-
-# 4. Revise antes de executar
-/spec-review
-
-# 5. Aprove e execute (notifica automaticamente ao concluir)
-/execute
+/vault-sync            # puxa mudanças antes de começar
+# ... trabalha, /new-spec, /exec-spec (que loga no vault) ...
+/vault-sync            # empurra tudo ao terminar
 ```
 
----
+O `spec-executor` escreve localmente em `<VAULT_ROOT>/10-duon/<slug>/estado.md` na seção `## Log do agente`. A sincronização git é sempre manual, por design — evita conflitos no meio de uma execução.
 
-## Protocolo Spec-First
+## Estrutura
 
-Todo trabalho segue três fases:
-
-**1. PLAN** — o agente analisa, cria a spec em `.opencode/specs/NNNN_nome.json` e apresenta o plano. Nenhum código é modificado nesta fase.
-
-Use `/new-spec` para tarefas simples (uma spec). Use `/plan-specs` para features maiores que precisam de decomposição em múltiplas specs.
-
-**2. Revisão** — você lê, ajusta se necessário, e aprova explicitamente.
-
-**3. BUILD** — o agente executa passo a passo, verifica cada step e registra o resultado no `outcome` da spec.
-
-Para mais detalhes sobre o fluxo de trabalho, veja `docs/workflow-guide.md`.
-
----
-
-## Skills disponíveis
-
-As skills são carregadas sob demanda pelo agente. Você pode invocá-las diretamente:
-
-| Skill | Quando usar |
-|---|---|
-| `tdd` | Lógica de negócio isolada, funções puras, ETL transforms |
-| `python-docker` | Criar ou ajustar Dockerfile, docker-compose, ambientes |
-| `diagrams` | Gerar C4 L1/L2 ou diagramas de sequência com Mermaid |
-| `spec-review` | Validar uma spec antes de aprovar execução |
-| `notify` | Referência de configuração das notificações |
-
----
-
-## Notificações (automáticas)
-
-Ao concluir o `/execute`, o agente notifica automaticamente via `notify.sh`.
-
-Por padrão, usa `notify-send` (Linux desktop). Para receber via Telegram, adicione ao `.env`:
-
-```env
-TELEGRAM_BOT_TOKEN=seu_token
-TELEGRAM_CHAT_ID=seu_chat_id
 ```
-
-Para obter o token: crie um bot via [@BotFather](https://t.me/BotFather).
-Para obter o chat_id: envie uma mensagem ao bot e acesse:
-`https://api.telegram.org/bot<TOKEN>/getUpdates`
-
----
-
-## O que commitar vs ignorar
-
-| Path | Git |
-|---|---|
-| `AGENTS.md` | ✅ commita |
-| `opencode.json` | ✅ commita |
-| `.opencode/rules/` | ✅ commita |
-| `.opencode/templates/` | ✅ commita |
-| `.opencode/commands/` | ✅ commita |
-| `.opencode/skills/` | ✅ commita |
-| `.opencode/docs/adr/` | ✅ commita |
-| `.opencode/docs/brainstorming/` | ✅ commita |
-| `docs/diagrams/` | ✅ commita |
-| `.opencode/specs/` | ❌ `.gitignore` |
-| `.env` | ❌ `.gitignore` |
-
----
-
-## Adaptando para um novo projeto
-
-O `AGENTS.md` vem com placeholders marcados com `<!-- /init: ... -->`. Após rodar `/init` dentro do OpenCode, o agente preenche automaticamente com base no código do projeto:
-
-- Stack e versões
-- Comandos de build, run e test
-- Estrutura de diretórios
-- Convenções específicas encontradas
-
-O que **não muda** entre projetos (já preenchido no template):
-- Protocolo Spec-First
-- Regras de TDD
-- Regras de Docker/Python
-- Seção "O que NÃO fazer"
-
----
+opencode-pack/
+├── AGENTS.md                 só contexto do projeto
+├── opencode.json             define agentes customizados
+├── install.sh                com presets
+├── VERSION
+├── CHANGELOG.md
+└── .opencode/
+    ├── rules/
+    │   └── vault-sync.md
+    ├── templates/
+    │   └── spec.md           markdown com frontmatter
+    ├── commands/
+    │   ├── new-spec.md
+    │   ├── exec-spec.md
+    │   └── notify.md
+    ├── agents/
+    │   ├── spec-writer.md
+    │   └── spec-executor.md
+    └── skills/
+        ├── python/           --preset=python
+        │   ├── tdd/
+        │   └── docker/
+        └── utils/
+            └── notify/
+```
 
 ## Versionamento
 
-O pack segue [Semantic Versioning](https://semver.org/lang/pt-BR/):
+[Semantic Versioning](https://semver.org/). Ver `CHANGELOG.md`.
 
-| Tipo | Quando |
-|---|---|
-| `MAJOR` (x.0.0) | Mudança que quebra compatibilidade — renomear arquivos, mudar estrutura de diretórios |
-| `MINOR` (1.x.0) | Nova funcionalidade sem quebrar nada — nova skill, novo comando |
-| `PATCH` (1.0.x) | Correção ou melhoria pequena — ajuste em regra, fix no `notify.sh` |
+## Publicando a branch v2-rewrite
 
-A versão instalada em cada projeto fica registrada em `.opencode/.pack-version`.
-Para verificar: `cat .opencode/.pack-version`
-
-Para atualizar um projeto existente para uma nova versão do pack:
+Passo a passo para subir esta reescrita como branch separada no repo existente:
 
 ```bash
-bash /caminho/para/opencode-pack/install.sh --force
+# Dentro do repo opencode-pack (onde main tem a v1)
+cd ~/repos/opencode-pack
+
+# Crie a branch a partir do estado atual da main
+git checkout -b v2-rewrite
+
+# Remova os arquivos antigos da v1 que foram substituídos
+# (ajuste conforme o que realmente existe)
+rm -rf .opencode AGENTS.md opencode.json install.sh
+
+# Copie os arquivos da v2 (descompactados deste zip) pra dentro do repo
+cp -r /caminho/para/opencode-pack-v2/* .
+cp -r /caminho/para/opencode-pack-v2/.opencode .
+cp /caminho/para/opencode-pack-v2/.gitignore .
+
+# Commita e publica
+git add -A
+git commit -m "feat: v2 rewrite — spec-writer/executor, vault sync, presets"
+git push -u origin v2-rewrite
 ```
 
----
-Para instalar em qualquer projeto a partir do repo:
-
-```bash
-# Clone e instale
-git clone https://github.com/lucasarlop/opencode-pack.git /tmp/opencode-pack
-bash /tmp/opencode-pack/install.sh
-
-# Ou one-liner
-bash <(curl -s https://raw.githubusercontent.com/lucasarlop/opencode-pack/main/install.sh)
-```
+Enquanto `v2-rewrite` estiver sendo validado, `main` continua servindo a v1. Depois de validado em projetos reais, merge para `main` e tag `v2.0.0`.

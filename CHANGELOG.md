@@ -1,36 +1,29 @@
 # Changelog
 
-Todas as mudanças relevantes do opencode-pack são documentadas aqui.
-Formato baseado em [Keep a Changelog](https://keepachangelog.com/pt-BR/1.0.0/).
-Versionamento segue [Semantic Versioning](https://semver.org/lang/pt-BR/).
+## 2.0.0 — 2026-04-10
 
----
+Reescrita completa. Incompatível com v1.x.
 
-## [1.0.0] — 2026-03-13
+### Mudanças principais
+- Protocolo Spec-First agora só ativa dentro de `/new-spec` e `/exec-spec`. Fora dos comandos, conversa e tarefas funcionam sem cerimônia.
+- `/new-spec` e `/exec-spec` rodam em agentes customizados (`spec-writer` e `spec-executor`) definidos no `opencode.json`. Separação por ferramentas, não por modo.
+- Spec agora é markdown com frontmatter (era JSON).
+- `AGENTS.md` enxugado para só contexto de projeto. Sem regras de protocolo, sem stack.
+- Presets de stack no install: `--preset=python|node|generic`. Default: `generic`.
+- Vault sync opcional via arquivo `.vault-link` na raiz do projeto.
+- 4 timestamps de tempo em cada spec: `created_at`, `exec_started_at`, `exec_finished_at`, `completed_at` + `duration_minutes` calculado.
+
+### Removido
+- Skill `diagrams`.
+- Skill `spec-review` (absorvida no fluxo do `spec-writer`).
+- ADRs (`.opencode/docs/adr/`).
+- Pasta `docs/diagrams/`.
+- Comando `/spec-review`.
 
 ### Adicionado
-- `AGENTS.md` base com placeholders para `/init`
-- `opencode.json` com `instructions` apontando para `planning.md`
-- `.opencode/rules/planning.md` — protocolo Spec-First v2.0
-- `.opencode/templates/spec_template.json` — template v2.1 com campos `tdd`, `docker` e `python`
-- `.opencode/commands/new-spec.md` — comando `/new-spec`
-- `.opencode/commands/spec-review.md` — comando `/spec-review`
-- `.opencode/commands/notify.md` + `notify.sh` — notificações via `notify-send` e Telegram
-- `.opencode/skills/tdd/` — protocolo Red→Green→Refactor com pytest
-- `.opencode/skills/python-docker/` — boas práticas Python + Docker
-- `.opencode/skills/diagrams/` — C4 L1/L2 e sequência com Mermaid
-- `.opencode/skills/spec-review/` — checklist de revisão de specs
-- `.opencode/skills/notify/` — documentação da skill de notificação
-- `install.sh` — instalação com merge de `.gitignore` e criação de diretórios
-- `.gitignore` — entradas para Python, Docker, `.env` e `.opencode/specs/`
-- `VERSION` — controle de versão do pack
-- `README.md` — documentação completa
-
----
-
-<!-- 
-Guia de versionamento:
-  MAJOR (x.0.0) — mudança que quebra compatibilidade (ex: renomear arquivos, mudar estrutura de diretórios)
-  MINOR (1.x.0) — nova funcionalidade sem quebrar nada (ex: nova skill, novo comando)
-  PATCH (1.0.x) — correção ou melhoria pequena (ex: ajuste em regra, fix no notify.sh)
--->
+- Agentes customizados em `.opencode/agents/`.
+- Install interativo: pergunta vault e telegram na primeira vez por máquina, salva em `~/.config/opencode-pack/config`.
+- Comando `/vault-link` — cria `.vault-link` no projeto atual (também pode ser feito durante o install).
+- Comando `/vault-sync` — sincroniza vault com git remoto (manual).
+- Regra `vault-sync.md` lendo config de máquina.
+- Flags `--preset`, `--vault-slug`, `--non-interactive`, `--dry-run` no install.
