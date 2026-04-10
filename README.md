@@ -151,3 +151,8 @@ git push -u origin v2-rewrite
 ```
 
 Enquanto `v2-rewrite` estiver sendo validado, `main` continua servindo a v1. Depois de validado em projetos reais, merge para `main` e tag `v2.0.0`.
+
+
+OPENCODE_PACK_BRANCH=v2-rewrite bash <(curl -s https://raw.githubusercontent.com/lucasarlop/opencode-pack/v2-rewrite/bootstrap.sh)
+<!-- bash <(curl -s https://raw.githubusercontent.com/lucasarlop/opencode-pack/main/bootstrap.sh)
+ -->
