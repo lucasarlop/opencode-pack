@@ -1,6 +1,8 @@
 .env
 .opencode/specs/
 .opencode/.pack-version
+.opencode/node_modules/
+.opencode/bun.lock
 __pycache__/
 *.pyc
 .venv/
