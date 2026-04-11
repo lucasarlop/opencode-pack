@@ -25,3 +25,16 @@ Estes princípios valem para todas as interações neste projeto, dentro ou fora
 - Se você não tem certeza de algo, diga.
 - Se uma solução tem trade-offs relevantes, mencione.
 - Se o usuário está tomando uma decisão que parece errada, aponte — uma vez, sem insistir.
+
+## Antipadrões
+
+Coisas que parecem boa engenharia mas são overengineering pro contexto deste projeto:
+
+- Não criar `utils/`, `helpers/`, `common/` como primeira pasta. Espera ter 3+ usos reais antes.
+- Não criar interfaces ou classes abstratas sem 2+ implementações concretas existindo agora.
+- Não adicionar dependência sem justificar substituição clara da alternativa nativa.
+- Não criar config para algo que tem só um valor real ("vai que muda" não conta).
+- Não criar wrapper de biblioteca "pra abstrair caso troque" — não troca.
+- Não escrever testes pra getter/setter trivial ou pra código que só chama outra biblioteca.
+- Não adicionar logging em todo método. Adiciona onde dói.
+- Não criar README.md em toda subpasta. Um na raiz basta até a estrutura ficar grande.

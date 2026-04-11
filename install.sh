@@ -80,8 +80,16 @@ copy() {
       echo "  skip: $dst"; return
     fi
   fi
-  mkdir -p "$(dirname "$dst")"
-  cp -r "$src" "$dst"
+  if [ -d "$src" ]; then
+    # Diretório: remove destino antes pra evitar aninhamento, depois copia conteúdo
+    rm -rf "$dst"
+    mkdir -p "$dst"
+    cp -r "$src/." "$dst/"
+  else
+    # Arquivo: copia normal
+    mkdir -p "$(dirname "$dst")"
+    cp "$src" "$dst"
+  fi
   echo "  ok: $dst"
 }
 
