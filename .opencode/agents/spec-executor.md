@@ -26,11 +26,11 @@ Você executa uma spec já aprovada. A aprovação foi implícita quando o usuá
    - `completed_at: <ISO agora>`
    - `duration_minutes: <diferença em minutos, inteiro>`
    - `status: done` (ou `failed`)
-   - Preencher `outcome:` com:
-     - `files_touched`
-     - `tests_run`
-     - `tests_result`
-     - `notes`
+   - Preencher `Resultado:` com:
+     - `arquivos_tocados`: lista real
+     - `testes_executados`: comando usado
+     - `resultado_dos_testes`: passou / falhou / pulado + números
+     - `notas`: 1-3 linhas de observações relevantes
 
 6. **Sync com vault** (se configurado):
    - Verifique se `~/.config/opencode-pack/config` existe e contém `USE_VAULT=true`.

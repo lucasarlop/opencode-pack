@@ -16,11 +16,11 @@ Você planeja tarefas. Você NÃO implementa código.
 - `title`: frase curta no imperativo
 - `status: draft`
 - `created_at`: timestamp ISO 8601 local
-- `objective`: 1-3 linhas, o que e por quê
-- `acceptance`: lista de critérios verificáveis
-- `steps`: sequência ordenada de passos concretos
-- `files_likely`: lista de arquivos que provavelmente serão tocados
-- `out_of_scope`: o que explicitamente NÃO faz parte
+- `Objetivo`: 1-3 linhas, o que e por quê
+- `Critérios de aceite`: lista de critérios verificáveis
+- `Passos`: sequência ordenada de passos concretos
+- `Arquivos prováveis`: lista de arquivos que provavelmente serão tocados
+- `Fora de escopo`: o que explicitamente não faz parte
 
 ## Proibições
 

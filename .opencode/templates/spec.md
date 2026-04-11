@@ -8,34 +8,34 @@ completed_at:
 duration_minutes: 
 ---
 
-## Objective
+## Objetivo
 <!-- 1-3 linhas. O que e por quê. -->
 
-## Acceptance
-<!-- Critérios verificáveis. Cada um deve poder ser respondido com sim/não. -->
+## Critérios de aceite
+<!-- Cada critério deve poder ser respondido com sim/não. -->
 - [ ] 
 - [ ] 
 
-## Steps
+## Passos
 <!-- Passos concretos na ordem. Cada passo deve ser executável. -->
 1. 
 2. 
 
-## Files likely
-<!-- Arquivos que provavelmente serão tocados. Pode estar errado, é estimativa. -->
+## Arquivos prováveis
+<!-- Arquivos que provavelmente serão tocados. É estimativa, pode estar errada. -->
 - 
 
-## Out of scope
+## Fora de escopo
 <!-- O que explicitamente NÃO faz parte desta spec. -->
 - 
 
-## Open questions
+## Dúvidas em aberto
 <!-- Preencha se houver ambiguidade não resolvida. Vazio é bom sinal. -->
 - 
 
-## Outcome
+## Resultado
 <!-- Preenchido pelo spec-executor ao terminar. Não edite antes. -->
-files_touched:
-tests_run:
-tests_result:
-notes:
+arquivos_tocados:
+testes_executados:
+resultado_dos_testes:
+notas:
