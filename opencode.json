@@ -1,6 +1,10 @@
 {
   "$schema": "https://opencode.ai/config.json",
-  "instructions": ["AGENTS.md"],
+  "instructions": [
+    "AGENTS.md",
+    ".opencode/rules/principles.md",
+    ".opencode/rules/vault-sync.md"
+  ],
   "agent": {
     "spec-writer": {
       "description": "Planeja e escreve specs. Não modifica código do projeto.",
