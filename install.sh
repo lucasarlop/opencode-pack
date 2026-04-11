@@ -205,6 +205,29 @@ if [ "$DRY_RUN" != "1" ]; then
   if [ -n "$VAULT_SLUG" ]; then
     echo "$VAULT_SLUG" > "$TARGET/.vault-link"
     echo "  ok: .vault-link ($VAULT_SLUG)"
+
+    # Cria a pasta no vault, se vault estiver configurado e ainda não existir
+    if [ "${USE_VAULT:-false}" = "true" ] && [ -n "${VAULT_ROOT:-}" ]; then
+      VAULT_NOTE_DIR="$VAULT_ROOT/10-duon/$VAULT_SLUG"
+      if [ ! -d "$VAULT_NOTE_DIR" ]; then
+        mkdir -p "$VAULT_NOTE_DIR"
+        # Copia templates se existirem
+        if [ -f "$VAULT_ROOT/90-templates/_template-estado.md" ]; then
+          cp "$VAULT_ROOT/90-templates/_template-estado.md" "$VAULT_NOTE_DIR/estado.md"
+          # Substitui o placeholder NOME_DO_PROJETO pelo slug
+          sed -i "s/NOME_DO_PROJETO/$VAULT_SLUG/g" "$VAULT_NOTE_DIR/estado.md"
+          # Atualiza a data
+          sed -i "s/AAAA-MM-DD/$(date +%Y-%m-%d)/g" "$VAULT_NOTE_DIR/estado.md"
+        fi
+        if [ -f "$VAULT_ROOT/90-templates/_template-tecnico.md" ]; then
+          cp "$VAULT_ROOT/90-templates/_template-tecnico.md" "$VAULT_NOTE_DIR/tecnico.md"
+          sed -i "s/NOME_DO_PROJETO/$VAULT_SLUG/g" "$VAULT_NOTE_DIR/tecnico.md"
+        fi
+        echo "  ok: vault note criada em $VAULT_NOTE_DIR"
+      else
+        echo "  skip: vault note já existe em $VAULT_NOTE_DIR"
+      fi
+    fi
   fi
 
   [ -f "$PACK_DIR/VERSION" ] && cp "$PACK_DIR/VERSION" "$TARGET/.opencode/.pack-version"
