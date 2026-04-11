@@ -30,21 +30,3 @@
 ## Convenções
 ?
 <!-- INIT:END -->
-
----
-
-## OpenPack — comandos disponíveis
-
-**Spec**
-- `/new-spec <descrição>` — cria uma spec (planejamento, não executa)
-- `/exec-spec [NNNN]` — executa spec aprovada (default: menor NNNN em draft)
-
-**Vault** (opcional)
-- `/vault-setup` — configura caminho do vault pessoal (uma vez por máquina)
-- `/vault-link <slug>` — vincula este projeto a uma pasta do vault
-- `/vault-sync` — sincroniza o vault com git remoto (pull + push)
-
-**Utilitários**
-- `/notify <mensagem>` — notifica conclusão
-
-Protocolo Spec-First só ativa dentro desses comandos. Fora deles, conversa e tarefas diretas funcionam normalmente.
