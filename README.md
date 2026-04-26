@@ -6,10 +6,10 @@ Implementa o protocolo **Spec-First**: toda tarefa grande começa com uma spec a
 
 ## Instalação
 
-> ⚠️ **Em validação.** Esta versão vive na branch `v2-rewrite`.
+> ✅ Esta é a versão atual, publicada na branch `main`.
 
 ```bash
-git clone -b v2-rewrite https://github.com/lucasarlop/opencode-pack.git /tmp/opencode-pack
+git clone https://github.com/lucasarlop/opencode-pack.git /tmp/opencode-pack
 cd meu-projeto
 bash /tmp/opencode-pack/install.sh
 ```
@@ -97,35 +97,26 @@ opencode-pack/
 
 [Semantic Versioning](https://semver.org/). Ver `CHANGELOG.md`.
 
-## Publicando a branch v2-rewrite
+## Publicando a versão atual
 
-Passo a passo para subir esta reescrita como branch separada no repo existente:
+Passo a passo para publicar atualizações na `main`:
 
 ```bash
-# Dentro do repo opencode-pack (onde main tem a v1)
+# Dentro do repo opencode-pack
 cd ~/repos/opencode-pack
 
-# Crie a branch a partir do estado atual da main
-git checkout -b v2-rewrite
+# Mantenha-se na branch main (ou traga as últimas mudanças)
+git checkout main
+git pull origin main
 
-# Remova os arquivos antigos da v1 que foram substituídos
-# (ajuste conforme o que realmente existe)
-rm -rf .opencode AGENTS.md opencode.json install.sh
-
-# Copie os arquivos da v2 (descompactados deste zip) pra dentro do repo
-cp -r /caminho/para/opencode-pack-v2/* .
-cp -r /caminho/para/opencode-pack-v2/.opencode .
-cp /caminho/para/opencode-pack-v2/.gitignore .
-
- # Commita e publica
- git add -A
- git commit -m "feat: v2 rewrite — spec-writer/executor, presets"
- git push -u origin v2-rewrite
+# Commita e publica
+git add -A
+git commit -m "feat: atualiza opencode-pack"
+git push origin main
 ```
 
-Enquanto `v2-rewrite` estiver sendo validado, `main` continua servindo a v1. Depois de validado em projetos reais, merge para `main` e tag `v2.0.0`.
+Instale usando a `main` (ou especifique `OPENCODE_PACK_BRANCH` para outra branch):
 
-
-OPENCODE_PACK_BRANCH=v2-rewrite bash <(curl -s https://raw.githubusercontent.com/lucasarlop/opencode-pack/v2-rewrite/bootstrap.sh)
-<!-- bash <(curl -s https://raw.githubusercontent.com/lucasarlop/opencode-pack/main/bootstrap.sh)
- -->
+```bash
+bash <(curl -s https://raw.githubusercontent.com/lucasarlop/opencode-pack/main/bootstrap.sh)
+```

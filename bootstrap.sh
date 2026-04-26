@@ -2,7 +2,7 @@
 # bootstrap.sh — baixa o opencode-pack e roda o install no diretório atual.
 # Uso:
 #   bash <(curl -s https://raw.githubusercontent.com/lucasarlop/opencode-pack/main/bootstrap.sh)
-#   bash <(curl -s https://raw.githubusercontent.com/lucasarlop/opencode-pack/v2-rewrite/bootstrap.sh)
+#   OPENCODE_PACK_BRANCH=<branch> bash <(curl -s https://raw.githubusercontent.com/lucasarlop/opencode-pack/main/bootstrap.sh)
 set -euo pipefail
 
 REPO="https://github.com/lucasarlop/opencode-pack.git"
