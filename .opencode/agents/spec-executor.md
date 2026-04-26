@@ -32,15 +32,6 @@ Você executa uma spec já aprovada. A aprovação foi implícita quando o usuá
      - `resultado_dos_testes`: passou / falhou / pulado + números
      - `notas`: 1-3 linhas de observações relevantes
 
-6. **Sync com vault** (se configurado):
-   - Verifique se `~/.config/opencode-pack/config` existe e contém `USE_VAULT=true`.
-   - Verifique se `.vault-link` existe na raiz do projeto.
-   - Se ambos, leia `VAULT_ROOT` do config e `slug` do `.vault-link`.
-   - Append em `<VAULT_ROOT>/10-duon/<slug>/estado.md`, seção `## Log do agente`:
-     `- AAAA-MM-DD: [spec NNNN] <title> — <done|failed>`
-   - Se arquivo ou seção não existir, ignore silenciosamente.
-   - **NÃO faça git push.** Sync é manual via `/vault-sync`.
-
 ## Proibições
 
 - Não modifique specs que não são a atual.

@@ -1,5 +1,14 @@
 # Changelog
 
+## 2.0.1 — Unreleased
+
+### Removido
+
+- Removida a integração com o fluxo de notas pessoais (Obsidian/vault).
+- Removidos comandos `/vault-link` e `/vault-sync`.
+- Removidas opções de instalação relacionadas a `vault` (`--vault-slug` e perguntas de configuração).
+- Atualizados os fluxos de `/exec-spec` e documentação para execução sem sync automático de vault.
+
 ## 2.0.0 — 2026-04-10
 
 Reescrita completa. Incompatível com v1.x.

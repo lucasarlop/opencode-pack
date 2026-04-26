@@ -16,25 +16,18 @@ bash /tmp/opencode-pack/install.sh
 
 O install é **interativo** na primeira vez em cada máquina. Ele pergunta:
 
-1. Se você quer integrar com um vault de notas (e o caminho).
-2. Se quer configurar Telegram para `/notify`.
-3. O preset de stack do projeto (`python` / `node` / `generic`).
-4. O slug deste projeto no vault (se vault ativado).
+1. Se quer configurar Telegram para `/notify`.
+2. O preset de stack do projeto (`python` / `node` / `generic`).
 
-As respostas 1 e 2 são salvas em `~/.config/opencode-pack/config` e reusadas nas próximas instalações. As respostas 3 e 4 são perguntadas a cada projeto.
+A resposta do Telegram é salva em `~/.config/opencode-pack/config` e reutilizada nas próximas instalações. A resposta do preset é perguntada em cada projeto.
 
 **Flags:**
 - `--non-interactive` — usa defaults, não pergunta nada
 - `--force` — sobrescreve arquivos existentes
 - `--dry-run` — mostra o que faria
 - `--preset=python|node|generic` — pula a pergunta de preset
-- `--vault-slug=SLUG` — pula a pergunta de slug
 
 Presets: `python`, `node`, `generic` (default).
-
-Flags:
-- `--dry-run` — mostra o que faria, não escreve.
-- `--force` — sobrescreve sem perguntar.
 
 ## Comandos
 
@@ -43,12 +36,6 @@ Flags:
 |---|---|
 | `/new-spec <descrição>` | Cria spec em `.opencode/specs/NNNN-slug.md`. Não executa. |
 | `/exec-spec [NNNN]` | Executa spec aprovada. Sem argumento: menor NNNN em `draft`. |
-
-**Vault (opcional)**
-| Comando | O que faz |
-|---|---|
-| `/vault-link <slug>` | Cria `.vault-link` no projeto atual (configurado no install, mas pode rodar depois). |
-| `/vault-sync` | `git pull --rebase && git push` no vault. Rode manualmente no início/fim da sessão. |
 
 **Utilitários**
 | Comando | O que faz |
@@ -63,8 +50,7 @@ Flags:
    → você lê, edita se quiser
 
 2. /exec-spec
-   → spec-executor pega a 0001, executa, registra outcome
-   → se .vault-link existir, loga no estado.md do vault
+   → spec-executor pega a 0001, executa e registra outcome
 
 3. /notify Login implementado
 ```
@@ -78,47 +64,34 @@ O pack define dois agentes em `opencode.json`:
 
 Fora dos comandos, os agentes padrão do OpenCode seguem funcionando normalmente.
 
-## Vault sync (opcional)
-
-Integração com um vault pessoal de notas. Configurada no install na primeira vez; depois disso é transparente.
-
-Fluxo típico por sessão:
-```bash
-/vault-sync            # puxa mudanças antes de começar
-# ... trabalha, /new-spec, /exec-spec (que loga no vault) ...
-/vault-sync            # empurra tudo ao terminar
-```
-
-O `spec-executor` escreve localmente em `<VAULT_ROOT>/10-duon/<slug>/estado.md` na seção `## Log do agente`. A sincronização git é sempre manual, por design — evita conflitos no meio de uma execução.
-
 ## Estrutura
 
 ```
 opencode-pack/
-├── AGENTS.md                 só contexto do projeto
-├── opencode.json             define agentes customizados
-├── install.sh                com presets
-├── VERSION
-├── CHANGELOG.md
-└── .opencode/
-    ├── rules/
-    │   └── vault-sync.md
-    ├── templates/
-    │   └── spec.md           markdown com frontmatter
-    ├── commands/
-    │   ├── new-spec.md
-    │   ├── exec-spec.md
-    │   └── notify.md
-    ├── agents/
-    │   ├── spec-writer.md
-    │   └── spec-executor.md
-    └── skills/
-        ├── python/           --preset=python
-        │   ├── tdd/
-        │   └── docker/
-        └── utils/
-            └── notify/
-```
+ ├── AGENTS.md                 só contexto do projeto
+ ├── opencode.json             define agentes customizados
+ ├── install.sh                com presets
+ ├── VERSION
+ ├── CHANGELOG.md
+ └── .opencode/
+     ├── rules/
+     │   └── principles.md
+     ├── templates/
+     │   └── spec.md           markdown com frontmatter
+     ├── commands/
+     │   ├── new-spec.md
+     │   ├── exec-spec.md
+     │   └── notify.md
+     ├── agents/
+     │   ├── spec-writer.md
+     │   └── spec-executor.md
+     └── skills/
+         ├── python/           --preset=python
+         │   ├── tdd/
+         │   └── docker/
+         └── utils/
+             └── notify/
+ ```
 
 ## Versionamento
 
@@ -144,10 +117,10 @@ cp -r /caminho/para/opencode-pack-v2/* .
 cp -r /caminho/para/opencode-pack-v2/.opencode .
 cp /caminho/para/opencode-pack-v2/.gitignore .
 
-# Commita e publica
-git add -A
-git commit -m "feat: v2 rewrite — spec-writer/executor, vault sync, presets"
-git push -u origin v2-rewrite
+ # Commita e publica
+ git add -A
+ git commit -m "feat: v2 rewrite — spec-writer/executor, presets"
+ git push -u origin v2-rewrite
 ```
 
 Enquanto `v2-rewrite` estiver sendo validado, `main` continua servindo a v1. Depois de validado em projetos reais, merge para `main` e tag `v2.0.0`.
