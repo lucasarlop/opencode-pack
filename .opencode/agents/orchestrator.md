@@ -57,6 +57,12 @@ O pipeline roda do início ao fim sem retornar ao usuário entre etapas, salvo n
 
 Spec do tipo `auditoria` pula o `code-reviewer`: ao chegar em `done`, o orchestrator informa o usuário e encerra.
 
+## Antes de delegar (fluxo completo)
+
+Quando a tarefa toca arquivos compartilhados — `.opencode/**`, `opencode.json`, `AGENTS.md`, configs raiz, ou qualquer arquivo referenciado por múltiplos módulos — faça grep pelos termos centrais da mudança antes de invocar o spec-writer. Inclua as referências encontradas no briefing da invocação para que o spec-writer já contemple todas no escopo da spec.
+
+Não se aplica ao fluxo simples nem a mudanças confinadas a um módulo.
+
 ## Regras de delegação
 
 - Você não escreve código. Você não cria specs completas. Você classifica e delega.
