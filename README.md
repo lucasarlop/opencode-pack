@@ -1,10 +1,10 @@
 # opencode-pack
 
-Bootstrap mínimo para projetos com [OpenCode](https://opencode.ai).
+Bootstrap mínimo para projetos com [OpenCode](https://opencode.ai). Versão atual: **3.0.0**.
 
 Implementa o protocolo **Spec-First**: toda tarefa grande começa com uma spec aprovada antes de qualquer código. Tarefas pequenas seguem direto, sem cerimônia.
 
-Você fala com um único agente, o `orchestrator`, que classifica a tarefa em **fluxo simples** ou **fluxo completo** e delega aos agentes especializados.
+Você fala com um único agente, o `orchestrator`, que classifica a tarefa em **fluxo simples** ou **fluxo completo** e delega aos agentes especializados. Não há comandos slash para o pipeline de specs — é tudo orquestrado via conversa.
 
 ## Instalação
 
@@ -18,7 +18,7 @@ bash /tmp/opencode-pack/install.sh
 
 O install é **interativo** na primeira vez em cada máquina. Ele pergunta:
 
-1. Se quer configurar Telegram para `/notify`.
+1. Se quer configurar Telegram para notificações.
 2. O preset de stack do projeto (`python` / `node` / `generic`).
 
 A resposta do Telegram é salva em `~/.config/opencode-pack/config` e reutilizada nas próximas instalações. A resposta do preset é perguntada em cada projeto.
@@ -33,23 +33,13 @@ Presets: `python`, `node`, `generic` (default).
 
 ## Comandos
 
-**Spec**
-| Comando | O que faz |
-|---|---|
-| `/new-spec <descrição>` | `spec-writer` cria spec em `.opencode/specs/NNNN-slug.md`. Não executa. |
-| `/review-spec [NNNN]` | `spec-reviewer` revisa a spec (SMART + hard gates) e devolve `approved` / `needs_revision` / `blocked`. Sem argumento: menor NNNN em `draft`. |
-| `/exec-spec [NNNN]` | `spec-executor` executa spec aprovada. Sem argumento: menor NNNN em `approved`. |
+O pipeline de specs (`spec-writer` → `spec-reviewer` → `spec-executor` → `code-reviewer`) é acionado pelo `orchestrator` em linguagem natural — não existem comandos slash para isso.
 
 **Bypass** (não afetam o fluxo, não alteram arquivos nem specs)
 | Comando | O que faz |
 |---|---|
 | `/btw <pergunta>` | Pergunta lateral curta. |
 | `/teach <tema>` | Explicação didática isolada. |
-
-**Utilitários**
-| Comando | O que faz |
-|---|---|
-| `/notify <mensagem>` | Notifica via Telegram ou `notify-send`. |
 
 ## Fluxo
 
@@ -63,20 +53,21 @@ Cada spec passa pelos estados `draft` → `approved` → `executing` → `done` 
 Exemplo de fluxo completo:
 
 ```
-1. "Adicionar endpoint de login com JWT e rate limiting"
+1. Usuário ao orchestrator:
+   "Adicionar endpoint de login com JWT e rate limiting"
    → orchestrator classifica como completo
-   → spec-writer cria .opencode/specs/0001-adicionar-endpoint-de-login.md (draft)
+   → delega ao spec-writer, que cria .opencode/specs/0001-adicionar-endpoint-de-login.md (draft)
 
-2. spec-reviewer avalia (SMART + 7 hard gates)
+2. orchestrator delega ao spec-reviewer
+   → avalia (SMART + 7 hard gates)
    → veredito: approved
 
-3. spec-executor executa a 0001
-   → registra budget_usado e outcome (done)
+3. orchestrator delega ao spec-executor
+   → executa a 0001, registra budget_usado e outcome (done)
 
-4. code-reviewer revisa o diff
-   → veredito: approved (ou redo, com 1 retrabalho máximo)
-
-5. /notify Login implementado
+4. orchestrator delega ao code-reviewer
+   → revisa o diff
+   → veredito: approved (ou redo, com 1 retrabalho máximo) → reviewed
 ```
 
 ## Agentes customizados
@@ -106,12 +97,8 @@ opencode-pack/
      ├── templates/
      │   └── spec.md           markdown com frontmatter
      ├── commands/
-     │   ├── new-spec.md
-     │   ├── review-spec.md
-     │   ├── exec-spec.md
      │   ├── btw.md
-     │   ├── teach.md
-     │   └── notify.md
+     │   └── teach.md
      ├── agents/
      │   ├── orchestrator.md
      │   ├── spec-writer.md
