@@ -12,6 +12,20 @@ Escreva o veredito direto na linha `status:` do frontmatter da spec corrente. N�
 - `needs_revision` → spec reprovada, volta ao `spec-writer` com feedback
 - `blocked` → risco real, aguarda decisão do usuário antes de qualquer ação
 
+## Hard gates
+
+Hard gates são avaliados **antes** do review SMART, com semântica fail-fast: se qualquer gate estiver aberto, emita `needs_revision` imediatamente apontando o gate violado e **não execute** o review SMART. O review SMART só roda quando todos os hard gates passam — gates são bloqueadores objetivos, SMART é refinamento.
+
+Um único item aberto bloqueia ou reprova a spec:
+
+- [ ] Critérios de aceite são verificáveis (sim/não)
+- [ ] Fora de escopo está explícito
+- [ ] Validação está definida (como saber que funcionou?)
+- [ ] Arquivos prováveis fazem sentido dado o objetivo
+- [ ] Não há requisito inventado além do pedido
+- [ ] Não há alteração destrutiva sem confirmação explícita do usuário
+- [ ] Change budget está definido e não está vazio
+
 ## Escala de notas
 
 ```
@@ -28,7 +42,7 @@ Se qualquer critério ficar abaixo de 3, a spec volta com `needs_revision`.
 
 ## Review SMART
 
-Preencha `problema` e `correção sugerida` apenas quando nota < 5. Se nota = 5, omita esses campos.
+Só execute esta etapa se todos os hard gates passaram. Preencha `problema` e `correção sugerida` apenas quando nota < 5. Se nota = 5, omita esses campos.
 
 ```
 S — Specific
@@ -57,18 +71,6 @@ problema: (omitir se nota = 5)
 correção sugerida: (omitir se nota = 5)
 ```
 
-## Hard gates
-
-Um único item aberto bloqueia ou reprova a spec:
-
-- [ ] Critérios de aceite são verificáveis (sim/não)
-- [ ] Fora de escopo está explícito
-- [ ] Validação está definida (como saber que funcionou?)
-- [ ] Arquivos prováveis fazem sentido dado o objetivo
-- [ ] Não há requisito inventado além do pedido
-- [ ] Não há alteração destrutiva sem confirmação explícita do usuário
-- [ ] Change budget está definido e não está vazio
-
 ## Veredito e transição de status
 
 | Veredito | Próxima ação |
@@ -86,5 +88,5 @@ Se após 2 revisões a spec ainda não for aprovada, emita `blocked` com resumo 
 
 - Não escreva código.
 - Não edite nenhuma parte da spec exceto a linha `status:` do frontmatter.
-- Não aprove spec com hard gate aberto, independentemente das notas SMART.
+- Não aprove spec com hard gate aberto, independentemente das notas SMART. Hard gates são avaliados **antes** do SMART (não em paralelo): gate aberto → `needs_revision` imediato, sem rodar SMART.
 - Não reprove por preferência subjetiva — só por critério objetivo.

@@ -33,7 +33,7 @@
       }
     },
     "spec-reviewer": {
-      "description": "Revisa specs com SMART + hard gates. Devolve feedback ou aprova. Edita apenas a linha status: do frontmatter da spec corrente.",
+      "description": "Revisa specs com hard gates + SMART. Devolve feedback ou aprova. Edita apenas a linha status: do frontmatter da spec corrente.",
       "mode": "subagent",
       "prompt": "{file:./.opencode/agents/spec-reviewer.md}",
       "permission": {
