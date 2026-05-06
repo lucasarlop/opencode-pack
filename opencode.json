@@ -5,6 +5,19 @@
     ".opencode/rules/principles.md"
   ],
   "agent": {
+    "orchestrator": {
+      "description": "Ponto de entrada único. Classifica a tarefa e decide o fluxo (simples ou completo).",
+      "mode": "primary",
+      "prompt": "{file:./.opencode/agents/orchestrator.md}",
+      "tools": {
+        "write": false,
+        "edit": false,
+        "read": true,
+        "bash": false,
+        "glob": true,
+        "grep": true
+      }
+    },
     "spec-writer": {
       "description": "Planeja e escreve specs. Não modifica código do projeto.",
       "mode": "primary",
@@ -28,8 +41,21 @@
         }
       }
     },
+    "spec-reviewer": {
+      "description": "Revisa specs com SMART + hard gates. Devolve feedback ou aprova. Não edita nada.",
+      "mode": "primary",
+      "prompt": "{file:./.opencode/agents/spec-reviewer.md}",
+      "tools": {
+        "write": false,
+        "edit": false,
+        "read": true,
+        "bash": false,
+        "glob": true,
+        "grep": false
+      }
+    },
     "spec-executor": {
-      "description": "Executa uma spec aprovada. Implementa código, roda testes, registra outcome.",
+      "description": "Executa specs com status approved. Implementa código, roda testes, registra outcome.",
       "mode": "primary",
       "prompt": "{file:./.opencode/agents/spec-executor.md}",
       "tools": {
@@ -37,6 +63,19 @@
         "edit": true,
         "read": true,
         "bash": true,
+        "glob": true,
+        "grep": true
+      }
+    },
+    "code-reviewer": {
+      "description": "Revisa código após execução. Devolve feedback ou aprova. Não edita nada.",
+      "mode": "primary",
+      "prompt": "{file:./.opencode/agents/code-reviewer.md}",
+      "tools": {
+        "write": false,
+        "edit": false,
+        "read": true,
+        "bash": false,
         "glob": true,
         "grep": true
       }

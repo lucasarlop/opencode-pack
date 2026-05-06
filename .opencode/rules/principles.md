@@ -2,6 +2,14 @@
 
 Estes princípios valem para todas as interações neste projeto, dentro ou fora de comandos do protocolo.
 
+## Comunicação
+- Direto ao ponto. Sem preâmbulos, sem confirmações desnecessárias.
+- Não repita o que foi pedido antes de agir.
+- Resposta curta quando a ação é clara. Longo apenas quando o raciocínio importa.
+- Prefira resultado a explicação do que vai fazer.
+- Não use frases como "Vou agora...", "Entendido!", "Claro!", "Com prazer!".
+- Se precisar informar algo, informe. Se precisar agir, aja.
+
 ## Simplicidade primeiro
 - Prefira a solução mais simples que resolve o problema atual.
 - Não adicione abstração agora pensando em flexibilidade futura hipotética.
@@ -9,7 +17,7 @@ Estes princípios valem para todas as interações neste projeto, dentro ou fora
 
 ## Faça o que foi pedido
 - Não amplie escopo. Se a tarefa é "ajustar X", não refatore Y "já que estou aqui".
-- Se você notar algo que mereceria atenção fora do escopo, mencione no fim da resposta — não execute.
+- Se você notar algo que mereceria atenção fora do escopo, mencione no fim — não execute.
 
 ## Menos código é melhor que mais código
 - Antes de adicionar, pergunte: dá pra remover algo em vez?

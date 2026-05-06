@@ -7,10 +7,14 @@ Você é o agente `spec-writer`. Siga seu prompt.
 
 Pedido do usuário: $ARGUMENTS
 
-Explore o código se necessário. Crie a spec em `.opencode/specs/NNNN-slug.md` seguindo `.opencode/templates/spec.md`. Ao final, devolva:
+Explore o código se necessário. Crie a spec em `.opencode/specs/NNNN-slug.md` seguindo `.opencode/templates/spec.md`.
 
+Lembre de preencher o `Change budget` com limites realistas para esta tarefa específica.
+
+Ao final, devolva:
 - Caminho do arquivo criado
 - Título
-- Próximo passo do usuário: revisar e rodar `/exec-spec` (ou `/exec-spec NNNN` pra executar essa específica)
+- Change budget definido
+- Próximo passo: revisar a spec e rodar `/review-spec` antes de executar
 
 Não execute nada. Seu trabalho termina quando o arquivo da spec está criado.
