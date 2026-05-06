@@ -9,75 +9,61 @@
       "description": "Ponto de entrada único. Classifica a tarefa e decide o fluxo (simples ou completo).",
       "mode": "primary",
       "prompt": "{file:./.opencode/agents/orchestrator.md}",
-      "tools": {
-        "write": false,
-        "edit": false,
-        "read": true,
-        "bash": false,
-        "glob": true,
-        "grep": true
+      "permission": {
+        "edit": "deny",
+        "bash": "deny",
+        "task": {
+          "spec-writer": "allow",
+          "spec-reviewer": "allow",
+          "spec-executor": "allow",
+          "code-reviewer": "allow"
+        }
       }
     },
     "spec-writer": {
       "description": "Planeja e escreve specs. Não modifica código do projeto.",
-      "mode": "primary",
+      "mode": "subagent",
       "prompt": "{file:./.opencode/agents/spec-writer.md}",
-      "tools": {
-        "write": true,
-        "edit": true,
-        "read": true,
-        "bash": false,
-        "glob": true,
-        "grep": true
-      },
       "permission": {
-        "write": {
-          ".opencode/specs/**": "allow",
-          "*": "deny"
-        },
         "edit": {
-          ".opencode/specs/**": "allow",
-          "*": "deny"
-        }
+          "*": "deny",
+          ".opencode/specs/**": "allow"
+        },
+        "bash": "deny"
       }
     },
     "spec-reviewer": {
-      "description": "Revisa specs com SMART + hard gates. Devolve feedback ou aprova. Não edita nada.",
-      "mode": "primary",
+      "description": "Revisa specs com SMART + hard gates. Devolve feedback ou aprova. Edita apenas a linha status: do frontmatter da spec corrente.",
+      "mode": "subagent",
       "prompt": "{file:./.opencode/agents/spec-reviewer.md}",
-      "tools": {
-        "write": false,
-        "edit": false,
-        "read": true,
-        "bash": false,
-        "glob": true,
-        "grep": false
+      "permission": {
+        "edit": {
+          "*": "deny",
+          ".opencode/specs/**": "allow"
+        },
+        "bash": "deny"
       }
     },
     "spec-executor": {
       "description": "Executa specs com status approved. Implementa código, roda testes, registra outcome.",
-      "mode": "primary",
+      "mode": "subagent",
       "prompt": "{file:./.opencode/agents/spec-executor.md}",
-      "tools": {
-        "write": true,
-        "edit": true,
-        "read": true,
-        "bash": true,
-        "glob": true,
-        "grep": true
+      "permission": {
+        "edit": "allow",
+        "write": "allow",
+        "bash": "allow"
       }
     },
     "code-reviewer": {
-      "description": "Revisa código após execução. Devolve feedback ou aprova. Não edita nada.",
-      "mode": "primary",
+      "description": "Revisa código após execução. Edita apenas a linha status: do frontmatter e a seção Code Review da spec corrente.",
+      "mode": "subagent",
       "prompt": "{file:./.opencode/agents/code-reviewer.md}",
-      "tools": {
-        "write": false,
-        "edit": false,
-        "read": true,
-        "bash": false,
-        "glob": true,
-        "grep": true
+      "permission": {
+        "edit": {
+          "*": "deny",
+          ".opencode/specs/**": "allow"
+        },
+        "bash": "deny"
       }
     }
   }

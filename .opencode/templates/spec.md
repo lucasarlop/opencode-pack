@@ -1,11 +1,8 @@
 ---
 title: 
 status: draft
+tipo:  # auditoria | mudanca
 created_at: 
-exec_started_at: 
-exec_finished_at: 
-completed_at: 
-duration_minutes: 
 ---
 
 ## Objetivo

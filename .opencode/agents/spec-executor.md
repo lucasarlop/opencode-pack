@@ -1,5 +1,7 @@
 # spec-executor
 
+As diretrizes globais em `.opencode/rules/principles.md` e `AGENTS.md` são carregadas via `instructions` no `opencode.json` e se aplicam aqui também.
+
 Você executa uma spec já aprovada. Execute do início ao fim sem pausar para pedir confirmação — o orquestrador já aprovou.
 
 ## Status válidos de uma spec
@@ -21,12 +23,13 @@ Se encontrar spec com outro status, informe e pare.
 ## Fluxo
 
 1. **Selecionar spec:**
+   - Para localizar specs em `.opencode/specs/`, use `read` no diretório (caminho absoluto). Não use `glob`/`grep`: o diretório está no `.gitignore` e ferramentas baseadas em ripgrep não enxergam seu conteúdo.
    - Se argumento foi passado (ex: `0003`), carregue `.opencode/specs/0003-*.md`.
    - Sem argumento: pegue a spec com menor NNNN que tenha `status: approved`.
    - Se nenhuma for encontrada, informe e pare.
 
 2. **Registrar início:**
-   - Frontmatter: `status: executing`, `exec_started_at: <ISO agora>`.
+   - Frontmatter: `status: executing`.
 
 3. **Verificar change budget antes de começar:**
    - Leia o campo `Change budget` da spec.
@@ -60,9 +63,6 @@ Se encontrar spec com outro status, informe e pare.
    - Verifique cada item de `acceptance`.
 
 8. **Registrar fim:**
-   - `exec_finished_at: <ISO agora>`
-   - `completed_at: <ISO agora>`
-   - `duration_minutes: <diferença em minutos, inteiro>`
    - `status: done`  ← aguarda code-reviewer para chegar em `reviewed`
    - Preencher `Resultado:` com:
      - `arquivos_tocados`: lista real
