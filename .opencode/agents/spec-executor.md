@@ -26,6 +26,8 @@ Se encontrar spec com outro status, informe e pare.
    - Para localizar specs em `.opencode/specs/`, use `read` no diretório (caminho absoluto). Não use `glob`/`grep`: o diretório está no `.gitignore` e ferramentas baseadas em ripgrep não enxergam seu conteúdo.
    - Se argumento foi passado (ex: `0003`), carregue `.opencode/specs/0003-*.md`.
    - Sem argumento: pegue a spec com menor NNNN que tenha `status: approved`.
+   - Se houver múltiplas specs encadeadas com `sequence`, `part_of` ou `depends_on`, selecione a próxima spec `approved` respeitando a ordem de `sequence` e só execute quando todas as specs em `depends_on` estiverem `done` ou `reviewed`.
+   - Se a próxima spec ordenada não estiver `approved`, ou se alguma dependência ainda não estiver concluída, informe e pare; não pule para partes posteriores.
    - Se nenhuma for encontrada, informe e pare.
 
 2. **Registrar início:**

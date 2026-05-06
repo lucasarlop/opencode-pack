@@ -2,7 +2,7 @@
 
 Bootstrap mínimo para projetos com [OpenCode](https://opencode.ai). Versão atual: **3.0.0**.
 
-Implementa o protocolo **Spec-First**: toda tarefa grande começa com uma spec aprovada antes de qualquer código. Tarefas pequenas seguem direto, sem cerimônia.
+Implementa o protocolo **Spec-First**: toda tarefa grande começa com uma spec aprovada — ou múltiplas specs ordenadas quando a quebra ajuda revisão e execução — antes de qualquer código. Tarefas pequenas seguem direto, sem cerimônia.
 
 Você fala com um único agente, o `orchestrator`, que classifica a tarefa em **fluxo simples** ou **fluxo completo** e delega aos agentes especializados. Não há comandos slash para o pipeline de specs — é tudo orquestrado via conversa.
 
@@ -46,9 +46,9 @@ O pipeline de specs (`spec-writer` → `spec-reviewer` → `spec-executor` → `
 Ponto de entrada único: o usuário fala com `orchestrator`, que classifica a tarefa.
 
 - **Fluxo simples** — correção pontual, ≤ 3 arquivos, descrição cabe em 1 frase. Spec compacta inline (sem arquivo em disco) → `spec-executor` → `code-reviewer`.
-- **Fluxo completo** — múltiplos módulos, > 5 arquivos prováveis, requisitos ambíguos, migrations/infra. Pipeline: `spec-writer` → `spec-reviewer` → `spec-executor` → `code-reviewer`. Roda do início ao fim sem intervenção, exceto em `blocked`, estouro de change budget ou `redo` do code-reviewer.
+- **Fluxo completo** — múltiplos módulos, > 5 arquivos prováveis, requisitos ambíguos, migrations/infra. Pipeline: `spec-writer` → `spec-reviewer` → `spec-executor` → `code-reviewer`. Pode gerar uma spec única ou múltiplas specs encadeadas, ordenadas por `sequence`/`depends_on`, por exemplo `0006-01-planejar.md` e `0006-02-executar.md`. Roda do início ao fim sem intervenção, exceto em `blocked`, estouro de change budget ou `redo` do code-reviewer.
 
-Cada spec passa pelos estados `draft` → `approved` → `executing` → `done` → `reviewed` (com `needs_revision`, `blocked` ou `failed` como ramificações). Ciclo de revisão limitado a **2 iterações** entre `spec-writer` e `spec-reviewer`.
+Cada spec passa pelos estados `draft` → `approved` → `executing` → `done` → `reviewed` (com `needs_revision`, `blocked` ou `failed` como ramificações). Quando houver múltiplas specs, cada parte segue esses estados na ordem definida. Ciclo de revisão limitado a **2 iterações** entre `spec-writer` e `spec-reviewer`.
 
 Exemplo de fluxo completo:
 
@@ -57,6 +57,7 @@ Exemplo de fluxo completo:
    "Adicionar endpoint de login com JWT e rate limiting"
    → orchestrator classifica como completo
    → delega ao spec-writer, que cria .opencode/specs/0001-adicionar-endpoint-de-login.md (draft)
+     ou, se fizer sentido, múltiplas specs como 0001-01-modelar-login.md e 0001-02-adicionar-rate-limit.md
 
 2. orchestrator delega ao spec-reviewer
    → avalia (SMART + 7 hard gates)

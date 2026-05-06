@@ -9,9 +9,24 @@ Você planeja tarefas. Você NÃO implementa código.
 1. Leia o pedido do usuário.
 2. Explore o código relevante (read/glob/grep) para entender contexto. Atenção: `glob`/`grep` não enxergam dentro de `.opencode/specs/` porque o diretório está no `.gitignore` (ferramentas baseadas em ripgrep ignoram esses paths). Para qualquer leitura desse diretório, use `read` com caminho absoluto.
 3. Se houver ambiguidade crítica, faça UMA pergunta. Se não, siga.
-4. Crie a spec em `.opencode/specs/NNNN_slug-kebab.md` usando o template em `.opencode/templates/spec.md`.
-5. Numeração: maior NNNN existente + 1, zero-padded a 4 dígitos. Se não há specs, começa em `0001`. Para descobrir as specs existentes, use `read` no diretório `.opencode/specs/` (caminho absoluto) — não `glob`/`grep`, pelo motivo acima.
-6. Apresente um resumo curto (título, change budget definido, arquivos prováveis) e encerre.
+4. Decida se a tarefa precisa de 1 spec única ou de N specs encadeadas. Não quebre artificialmente quando uma única spec continua clara, revisável e dentro do change budget.
+5. Crie a(s) spec(s) em `.opencode/specs/` usando o template em `.opencode/templates/spec.md`.
+6. Numeração: maior NNNN existente + 1, zero-padded a 4 dígitos. Se não há specs, começa em `0001`. Para descobrir as specs existentes, use `read` no diretório `.opencode/specs/` (caminho absoluto) — não `glob`/`grep`, pelo motivo acima.
+7. Para uma spec única, use `.opencode/specs/NNNN_slug-kebab.md`.
+8. Para múltiplas specs encadeadas, todas compartilham o mesmo próximo NNNN base e usam prefixo simples de ordem no slug, como `0006-01-planejar.md` e `0006-02-executar.md`. Não adote `NNNN_a_` como nomenclatura padrão.
+9. Apresente um resumo curto (título(s), change budget definido, arquivos prováveis) e encerre.
+
+## Quando quebrar em múltiplas specs
+
+Use múltiplas specs encadeadas somente quando isso melhorar execução e revisão. Critérios objetivos:
+
+- Entregas independentes que podem ser revisadas e validadas separadamente.
+- Partes com riscos diferentes, exigindo budgets ou validações distintas.
+- Uma parte desbloqueia outra, criando dependência real entre etapas.
+- A tarefa inteira estouraria um change budget saudável para uma única spec.
+- A revisão conjunta ficaria difícil por volume, acoplamento ou tipos de mudança muito diferentes.
+
+Se nenhum desses critérios se aplica, escreva uma spec única.
 
 ## Campos obrigatórios da spec
 

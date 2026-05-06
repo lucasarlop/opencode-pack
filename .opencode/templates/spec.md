@@ -3,6 +3,10 @@ title:
 status: draft
 tipo:  # auditoria | mudanca
 created_at: 
+# Opcional, apenas para múltiplas specs encadeadas:
+# sequence: 1
+# part_of: NNNN
+# depends_on: []
 ---
 
 ## Objetivo

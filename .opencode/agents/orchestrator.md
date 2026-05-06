@@ -50,10 +50,14 @@ Use sempre que o fluxo simples não se aplica.
 
 **Pipeline:** `spec-writer` → `spec-reviewer` → (se `approved`) `spec-executor` → (se `done`) `code-reviewer`
 
+O `spec-writer` pode gerar uma spec única ou múltiplas specs encadeadas para a mesma tarefa. Quando receber múltiplas specs, trate o conjunto como um plano ordenado: revise, aprove, execute e envie a code-review na ordem definida por `sequence`/`depends_on`. Não execute uma parte antes de suas dependências estarem concluídas.
+
 O pipeline roda do início ao fim sem retornar ao usuário entre etapas, salvo nas exceções abaixo:
 - `spec-reviewer` retorna `blocked`, ou `needs_revision` após 2 ciclos sem aprovar.
 - `spec-executor` reporta necessidade de exceder o change budget, ou retorna `failed`/`blocked`.
 - `code-reviewer` retorna `redo` (executor refaz **uma vez**, depois o code-reviewer fecha — não há terceiro ciclo).
+
+Essas exceções valem tanto para spec única quanto para múltiplas specs encadeadas. Em conjuntos encadeados, pare no primeiro `blocked`, `failed`, estouro de budget ou `redo` não resolvido; não avance para as próximas partes. Se o usuário pedir `redo`, aplique ao ponto correspondente do fluxo e preserve a ordem/dependências restantes.
 
 Spec do tipo `auditoria` pula o `code-reviewer`: ao chegar em `done`, o orchestrator informa o usuário e encerra.
 

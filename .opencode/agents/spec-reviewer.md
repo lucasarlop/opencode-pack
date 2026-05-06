@@ -44,6 +44,8 @@ Se qualquer critério ficar abaixo de 3, a spec volta com `needs_revision`.
 
 Só execute esta etapa se todos os hard gates passaram. Preencha `problema` e `correção sugerida` apenas quando nota < 5. Se nota = 5, omita esses campos.
 
+Se a spec fizer parte de múltiplas specs encadeadas, revise a spec corrente individualmente e também como parte do plano maior. Quando houver `sequence`, `part_of` ou `depends_on`, verifique coerência mínima com a tarefa maior: ordem clara, dependências existentes, entrega desta parte revisável sozinha e ausência de lacunas entre partes. Mesmo nesse caso, edite somente a linha `status:` do frontmatter da spec corrente.
+
 ```
 S — Specific
 nota: 0-5
