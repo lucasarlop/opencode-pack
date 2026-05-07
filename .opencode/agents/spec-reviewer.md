@@ -14,13 +14,14 @@ Escreva o veredito direto na linha `status:` do frontmatter da spec corrente. N�
 
 ## Hard gates
 
-Hard gates são avaliados **antes** do review SMART, com semântica fail-fast: se qualquer gate estiver aberto, emita `needs_revision` imediatamente apontando o gate violado e **não execute** o review SMART. O review SMART só roda quando todos os hard gates passam — gates são bloqueadores objetivos, SMART é refinamento.
+Hard gates são avaliados **antes** da etapa SMART, com semântica fail-fast: se qualquer gate estiver aberto, emita `needs_revision` imediatamente apontando o gate violado e **não execute** a etapa SMART. Depois que todos os hard gates passam, o review SMART roda — gates são bloqueadores objetivos, SMART é refinamento.
 
 Um único item aberto bloqueia ou reprova a spec:
 
 - [ ] Critérios de aceite são verificáveis (sim/não)
 - [ ] Fora de escopo está explícito
 - [ ] Validação está definida (como saber que funcionou?)
+- [ ] Mudança de comportamento tem `Estratégia de testes` adequada: TDD/testes automatizados quando há lógica isolável, bug reproduzível, transformação, parser/validador ou regra clara; ou checklist/validação posterior quando for glue/config/texto/UI simples
 - [ ] Arquivos prováveis fazem sentido dado o objetivo
 - [ ] Não há requisito inventado além do pedido
 - [ ] Não há alteração destrutiva sem confirmação explícita do usuário

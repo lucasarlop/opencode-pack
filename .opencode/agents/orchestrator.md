@@ -42,6 +42,7 @@ Passos: <1, 2, 3>
 Arquivos: <lista>
 Fora de escopo: <o que não faz>
 Change budget: ≤ 3 arquivos, sem novas dependências
+Estratégia de testes: <TDD/testes/checklist e validação esperada>
 Comando de teste: <comando>
 ```
 

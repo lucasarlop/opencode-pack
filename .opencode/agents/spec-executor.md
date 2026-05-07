@@ -38,13 +38,19 @@ Se encontrar spec com outro status, informe e pare.
    - Se o budget não estiver definido, pare e informe o orquestrador — não assuma limites.
    - O budget é seu limite rígido durante toda a execução.
 
-4. **Executar passo a passo:**
+4. **Ler a Estratégia de testes:**
+   - Siga a estratégia definida na spec antes de implementar.
+   - Crie ou ajuste testes quando a mudança alterar comportamento verificável.
+   - Use TDD quando a mudança envolver lógica isolável, bug reproduzível, transformação de dados, parser/validador ou regra clara.
+   - Use validação posterior/checklist quando o escopo for glue, config, texto/documentação ou UI simples sem lógica relevante.
+
+5. **Executar passo a passo:**
    - Siga `steps` na ordem.
    - Respeite `out_of_scope` estritamente.
    - Não pause para pedir confirmação entre steps — execute até o fim.
-   - Se um passo falhar e não for recuperável, marque `status: failed` e vá ao passo 7.
+   - Se um passo falhar e não for recuperável, marque `status: failed` e vá ao passo 8.
 
-5. **Testes por escopo:**
+6. **Testes por escopo:**
    - Rode apenas os testes do módulo alterado — não a suite completa.
    - Identifique o comando pelo campo `Comando de teste` da spec ou pelo contexto do projeto:
      - Docker: `docker compose exec <serviço> <comando-de-teste>`
@@ -54,24 +60,24 @@ Se encontrar spec com outro status, informe e pare.
    - Se não conseguir inferir, pergunte uma vez.
    - Suite completa apenas no step final de validação.
 
-6. **Respeitar o change budget:**
+7. **Respeitar o change budget:**
    - Rastreie arquivos tocados a cada step.
    - Se precisar tocar arquivo fora do permitido ou exceder o limite, **pare imediatamente**.
    - Informe o orquestrador: qual arquivo extra é necessário e por quê.
    - Não "só ajuste mais um arquivo". Nunca.
 
-7. **Validar:**
+8. **Validar:**
    - Rode a suite completa uma vez.
    - Verifique cada item de `acceptance`.
 
-8. **Registrar fim:**
+9. **Registrar fim:**
    - `status: done`  ← aguarda code-reviewer para chegar em `reviewed`
    - Preencher `Resultado:` com:
      - `arquivos_tocados`: lista real
      - `budget_usado`: ex: `3/5 arquivos, 0 novas dependências`
-     - `testes_executados`: comando exato usado
-     - `resultado_dos_testes`: passou / falhou / pulado + números
-     - `notas`: 1-3 linhas de observações relevantes
+      - `testes_executados`: comando exato usado
+      - `resultado_dos_testes`: passou / falhou / pulado + números
+      - `notas`: 1-3 linhas de observações relevantes, incluindo se usou TDD ou validação posterior/checklist
 
 ## Proibições
 

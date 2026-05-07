@@ -38,6 +38,8 @@ Se nenhum desses critérios se aplica, escreva uma spec única.
 - `Critérios de aceite`: lista de critérios verificáveis (cada um respondível com sim/não)
 - `Passos`: sequência ordenada de passos concretos e executáveis
 - `Change budget`: limites realistas para esta tarefa — máximo de arquivos, dependências permitidas, paths permitidos e proibidos
+- `Estratégia de testes`: abordagem de teste/validação definida antes da execução
+- `Comando de teste`: comando ou checklist de validação por escopo, mais suite completa quando aplicável
 - `Arquivos prováveis`: estimativa dos arquivos que serão tocados
 - `Fora de escopo`: o que explicitamente não faz parte
 
@@ -50,6 +52,17 @@ Calibre pelo tamanho real da tarefa. Exemplos:
 - Refactor: `≤ 8 arquivos, sem novas dependências, sem migrations/**`
 
 Sempre inclua caminhos proibidos quando houver risco (migrations, infra, deploy).
+
+## Estratégia de testes — como definir
+
+Defina a estratégia antes da execução e calibre pelo risco da mudança:
+
+- Use TDD quando houver lógica isolável, bug reproduzível, transformação de dados, parser/validador ou regra clara de negócio.
+- Crie ou ajuste testes automatizados quando a mudança altera comportamento verificável e o projeto já tem caminho de teste viável para o módulo.
+- Use validação posterior/checklist quando a mudança for glue code, config, texto/documentação ou UI simples sem lógica relevante.
+- Não prescreva teste trivial para getter/setter, repasse direto a biblioteca ou texto sem comportamento.
+
+Registre na spec se TDD será usado, quais verificações provam o comportamento e qual comando/checklist o executor deve aplicar.
 
 ## Comandos de verificação
 

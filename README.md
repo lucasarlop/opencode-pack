@@ -2,7 +2,7 @@
 
 Bootstrap mínimo para projetos com [OpenCode](https://opencode.ai). Versão atual: **3.0.0**.
 
-Implementa o protocolo **Spec-First**: toda tarefa grande começa com uma spec aprovada — ou múltiplas specs ordenadas quando a quebra ajuda revisão e execução — antes de qualquer código. Tarefas pequenas seguem direto, sem cerimônia.
+Implementa o protocolo **Spec-First**: toda tarefa grande começa com uma spec aprovada — ou múltiplas specs ordenadas quando a quebra ajuda revisão e execução — antes de qualquer código. Specs também definem a estratégia de testes/validação antes da execução. Tarefas pequenas seguem direto, sem cerimônia.
 
 Você fala com um único agente, o `orchestrator`, que classifica a tarefa em **fluxo simples** ou **fluxo completo** e delega aos agentes especializados. Não há comandos slash para o pipeline de specs — é tudo orquestrado via conversa.
 
@@ -45,10 +45,14 @@ O pipeline de specs (`spec-writer` → `spec-reviewer` → `spec-executor` → `
 
 Ponto de entrada único: o usuário fala com `orchestrator`, que classifica a tarefa.
 
-- **Fluxo simples** — correção pontual, ≤ 3 arquivos, descrição cabe em 1 frase. Spec compacta inline (sem arquivo em disco) → `spec-executor` → `code-reviewer`.
+- **Fluxo simples** — correção pontual, ≤ 3 arquivos, descrição cabe em 1 frase. Spec compacta inline com estratégia de testes/validação (sem arquivo em disco) → `spec-executor` → `code-reviewer`.
 - **Fluxo completo** — múltiplos módulos, > 5 arquivos prováveis, requisitos ambíguos, migrations/infra. Pipeline: `spec-writer` → `spec-reviewer` → `spec-executor` → `code-reviewer`. Pode gerar uma spec única ou múltiplas specs encadeadas, ordenadas por `sequence`/`depends_on`, por exemplo `0006-01-planejar.md` e `0006-02-executar.md`. Roda do início ao fim sem intervenção, exceto em `blocked`, estouro de change budget ou `redo` do code-reviewer.
 
 Cada spec passa pelos estados `draft` → `approved` → `executing` → `done` → `reviewed` (com `needs_revision`, `blocked` ou `failed` como ramificações). Quando houver múltiplas specs, cada parte segue esses estados na ordem definida. Ciclo de revisão limitado a **2 iterações** entre `spec-writer` e `spec-reviewer`.
+
+### Estratégia de testes
+
+Toda spec deve declarar como a mudança será testada ou validada. Use TDD quando houver lógica isolável, bug reproduzível, transformação de dados, parser/validador ou regra clara. Para glue code, config, texto/documentação ou UI simples sem lógica relevante, aceite validação posterior/checklist. O `spec-reviewer` bloqueia mudança de comportamento sem estratégia adequada, o `spec-executor` cria/ajusta testes ou executa o checklist definido, e o `code-reviewer` revisa a qualidade dos testes/verificações.
 
 Exemplo de fluxo completo:
 
@@ -60,7 +64,7 @@ Exemplo de fluxo completo:
      ou, se fizer sentido, múltiplas specs como 0001-01-modelar-login.md e 0001-02-adicionar-rate-limit.md
 
 2. orchestrator delega ao spec-reviewer
-   → avalia (SMART + 7 hard gates)
+   → avalia (hard gates + SMART, incluindo estratégia de testes)
    → veredito: approved
 
 3. orchestrator delega ao spec-executor
@@ -77,9 +81,9 @@ O pack define cinco agentes em `opencode.json`:
 
 - **orchestrator** — primary. Classifica a tarefa e delega. Sem write/edit/bash.
 - **spec-writer** — planeja. Só escreve em `.opencode/specs/`. Sem bash.
-- **spec-reviewer** — revisa specs (SMART + 7 hard gates, threshold ≥ 3). Não edita nada.
+- **spec-reviewer** — revisa specs (hard gates + SMART, incluindo estratégia de testes, threshold ≥ 3). Não edita nada.
 - **spec-executor** — executa specs `approved`. Write/edit/bash liberados. Registra `budget_usado` e outcome.
-- **code-reviewer** — revisa código após `done`. Veredito `approved` ou `redo` (1 retrabalho máximo).
+- **code-reviewer** — revisa código e testes/verificações após `done`. Veredito `approved` ou `redo` (1 retrabalho máximo).
 
 Fora dos comandos, os agentes padrão do OpenCode seguem funcionando normalmente.
 
@@ -108,7 +112,6 @@ opencode-pack/
      │   └── code-reviewer.md
      └── skills/
          ├── python/           --preset=python
-         │   ├── tdd/
          │   └── docker/
          └── utils/
              └── notify/

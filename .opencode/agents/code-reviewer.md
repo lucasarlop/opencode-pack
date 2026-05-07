@@ -23,6 +23,12 @@ Após o executor marcar `status: done`. Você é o último agente do fluxo compl
 - Há tratamento de erro onde deveria haver?
 - Há efeito colateral não declarado na spec?
 
+### 3. Qualidade dos testes/verificações
+- Os testes ou verificações cobrem o comportamento alterado descrito na spec?
+- A execução seguiu a `Estratégia de testes` definida?
+- Há testes triviais sem valor (getter/setter, repasse direto a biblioteca, snapshot/texto sem comportamento)?
+- Quando não houver teste automatizado, o checklist/validação posterior é coerente com glue/config/texto/UI simples?
+
 ## Formato da review
 
 ```
@@ -36,6 +42,11 @@ divergências: (omitir se ok)
 status: ok | issues
 issues:
 - <arquivo>: <problema curto>
+
+### Testes/verificações
+status: ok | issues
+issues:
+- <arquivo ou validação>: <problema curto>
 
 ### Veredito
 approved | redo

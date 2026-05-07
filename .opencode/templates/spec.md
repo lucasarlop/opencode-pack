@@ -34,6 +34,11 @@ created_at:
   - `migrations/**`
   - `infra/**`
 
+## Estratégia de testes
+<!-- Abordagem: testes automatizados, validação manual/checklist ou ambos. -->
+<!-- TDD: sim para lógica isolável, bug reproduzível, transformação, parser/validador ou regra clara; não para glue/config/texto/UI simples. -->
+<!-- Validação esperada: o que deve ser executado/verificado para provar que funcionou. -->
+
 ## Comando de teste
 <!-- Como rodar os testes neste projeto. Ajuste conforme o ambiente. -->
 <!-- Exemplos: -->
