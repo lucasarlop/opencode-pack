@@ -52,10 +52,10 @@
     },
     "spec-executor": {
       "description": "Executa specs com status approved ou redo. Implementa código, roda testes, registra outcome.",
-      "model": "openai/gpt-5.3-codex",
+      "model": "openai/gpt-5.5",
       "mode": "subagent",
       "prompt": "{file:./.opencode/agents/spec-executor.md}",
-      "variant": "xhigh",
+      "variant": "high",
       "permission": {
         "edit": "allow",
         "write": "allow",
