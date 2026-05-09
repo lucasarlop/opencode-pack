@@ -7,8 +7,10 @@
   "agent": {
     "orchestrator": {
       "description": "Ponto de entrada único. Classifica a tarefa e decide o fluxo (simples ou completo).",
+      "model": "openai/gpt-5.5",
       "mode": "primary",
       "prompt": "{file:./.opencode/agents/orchestrator.md}",
+      "variant": "medium",
       "permission": {
         "edit": "deny",
         "bash": "deny",
@@ -22,8 +24,10 @@
     },
     "spec-writer": {
       "description": "Planeja e escreve specs. Não modifica código do projeto.",
+      "model": "openai/gpt-5.5",
       "mode": "subagent",
       "prompt": "{file:./.opencode/agents/spec-writer.md}",
+      "variant": "high",
       "permission": {
         "edit": {
           "*": "deny",
@@ -34,8 +38,10 @@
     },
     "spec-reviewer": {
       "description": "Revisa specs com hard gates + SMART. Devolve feedback ou aprova. Edita apenas a linha status: do frontmatter da spec corrente.",
+      "model": "openai/gpt-5.5",
       "mode": "subagent",
       "prompt": "{file:./.opencode/agents/spec-reviewer.md}",
+      "variant": "low",
       "permission": {
         "edit": {
           "*": "deny",
@@ -46,8 +52,10 @@
     },
     "spec-executor": {
       "description": "Executa specs com status approved. Implementa código, roda testes, registra outcome.",
+      "model": "openai/gpt-5.3-codex",
       "mode": "subagent",
       "prompt": "{file:./.opencode/agents/spec-executor.md}",
+      "variant": "xhigh",
       "permission": {
         "edit": "allow",
         "write": "allow",
@@ -56,8 +64,10 @@
     },
     "code-reviewer": {
       "description": "Revisa código após execução. Edita apenas a linha status: do frontmatter e a seção Code Review da spec corrente.",
+      "model": "openai/gpt-5.5",
       "mode": "subagent",
       "prompt": "{file:./.opencode/agents/code-reviewer.md}",
+      "variant": "high",
       "permission": {
         "edit": {
           "*": "deny",
