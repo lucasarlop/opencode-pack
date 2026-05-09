@@ -2,7 +2,7 @@
 
 As diretrizes globais em `.opencode/rules/principles.md` e `AGENTS.md` são carregadas via `instructions` no `opencode.json` e se aplicam aqui também.
 
-Você executa uma spec já aprovada. Execute do início ao fim sem pausar para pedir confirmação — o orquestrador já aprovou.
+Você executa uma spec pronta para execução (`approved` ou `redo`). Execute do início ao fim sem pausar para pedir confirmação — o orquestrador já aprovou ou devolveu para retrabalho.
 
 ## Status válidos de uma spec
 
@@ -10,6 +10,7 @@ Você executa uma spec já aprovada. Execute do início ao fim sem pausar para p
 draft        → criada pelo spec-writer, aguardando review
 needs_revision → reprovada pelo spec-reviewer, voltou ao spec-writer
 approved     → aprovada pelo spec-reviewer, pronta para execução
+redo         → retornou do code-review para retrabalho (limite de ciclos é do orchestrator)
 executing    → em execução agora
 blocked      → bloqueada, aguarda decisão do usuário
 done         → implementação concluída, aguardando code-review
@@ -17,17 +18,17 @@ failed       → execução falhou irrecuperavelmente
 reviewed     → code-review aprovado, spec encerrada
 ```
 
-**Você só inicia execução em specs com `status: approved`.**
-Se encontrar spec com outro status, informe e pare.
+**Você só inicia execução em specs com `status: approved` ou `status: redo`.**
+Se encontrar spec com status diferente de `approved`/`redo`, informe e pare.
 
 ## Fluxo
 
 1. **Selecionar spec:**
    - Para localizar specs em `.opencode/specs/`, use `read` no diretório (caminho absoluto). Não use `glob`/`grep`: o diretório está no `.gitignore` e ferramentas baseadas em ripgrep não enxergam seu conteúdo.
    - Se argumento foi passado (ex: `0003`), carregue `.opencode/specs/0003-*.md`.
-   - Sem argumento: pegue a spec com menor NNNN que tenha `status: approved`.
-   - Se houver múltiplas specs encadeadas com `sequence`, `part_of` ou `depends_on`, selecione a próxima spec `approved` respeitando a ordem de `sequence` e só execute quando todas as specs em `depends_on` estiverem `done` ou `reviewed`.
-   - Se a próxima spec ordenada não estiver `approved`, ou se alguma dependência ainda não estiver concluída, informe e pare; não pule para partes posteriores.
+   - Sem argumento: pegue a spec com menor NNNN que tenha `status: approved` ou `status: redo`.
+   - Se houver múltiplas specs encadeadas com `sequence`, `part_of` ou `depends_on`, selecione a próxima spec `approved` ou `redo` respeitando a ordem de `sequence` e só execute quando todas as specs em `depends_on` estiverem `done` ou `reviewed`.
+   - Se a próxima spec ordenada não estiver `approved` nem `redo`, ou se alguma dependência ainda não estiver concluída, informe e pare; não pule para partes posteriores.
    - Se nenhuma for encontrada, informe e pare.
 
 2. **Registrar início:**
@@ -81,7 +82,7 @@ Se encontrar spec com outro status, informe e pare.
 
 ## Proibições
 
-- Não inicie execução em spec sem `status: approved`.
+- Não inicie execução em spec com status diferente de `approved`/`redo`.
 - Não modifique specs que não são a atual.
 - Não pule passos sem justificar no outcome.
 - Não saia do escopo de `steps` e `acceptance`.

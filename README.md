@@ -46,9 +46,9 @@ O pipeline de specs (`spec-writer` → `spec-reviewer` → `spec-executor` → `
 Ponto de entrada único: o usuário fala com `orchestrator`, que classifica a tarefa.
 
 - **Fluxo simples** — correção pontual, ≤ 3 arquivos, descrição cabe em 1 frase. Spec compacta inline com estratégia de testes/validação (sem arquivo em disco) → `spec-executor` → `code-reviewer`.
-- **Fluxo completo** — múltiplos módulos, > 5 arquivos prováveis, requisitos ambíguos, migrations/infra. Pipeline: `spec-writer` → `spec-reviewer` → `spec-executor` → `code-reviewer`. Pode gerar uma spec única ou múltiplas specs encadeadas, ordenadas por `sequence`/`depends_on`, por exemplo `0006-01-planejar.md` e `0006-02-executar.md`. Roda do início ao fim sem intervenção, exceto em `blocked`, estouro de change budget ou `redo` do code-reviewer.
+- **Fluxo completo** — múltiplos módulos, > 5 arquivos prováveis, requisitos ambíguos, migrations/infra. Pipeline: `spec-writer` → `spec-reviewer` → `spec-executor` → `code-reviewer`. Pode gerar uma spec única ou múltiplas specs encadeadas, ordenadas por `sequence`/`depends_on`, por exemplo `0006-01-planejar.md` e `0006-02-executar.md`. Roda do início ao fim sem intervenção, exceto em `blocked`, estouro de change budget ou `redo` do code-reviewer (que volta ao `spec-executor` uma única vez).
 
-Cada spec passa pelos estados `draft` → `approved` → `executing` → `done` → `reviewed` (com `needs_revision`, `blocked` ou `failed` como ramificações). Quando houver múltiplas specs, cada parte segue esses estados na ordem definida. Ciclo de revisão limitado a **2 iterações** entre `spec-writer` e `spec-reviewer`.
+Cada spec passa pelos estados `draft` → `approved` → `executing` → `done` → `reviewed` (com `needs_revision`, `blocked`, `failed` ou `redo` como ramificações). Em `redo`, a spec retorna ao `spec-executor` e passa por novo `code-reviewer`, com **1 retrabalho máximo**. Quando houver múltiplas specs, cada parte segue esses estados na ordem definida. Ciclo de revisão limitado a **2 iterações** entre `spec-writer` e `spec-reviewer`.
 
 ### Estratégia de testes
 
@@ -72,7 +72,8 @@ Exemplo de fluxo completo:
 
 4. orchestrator delega ao code-reviewer
    → revisa o diff
-   → veredito: approved (ou redo, com 1 retrabalho máximo) → reviewed
+   → veredito: approved → reviewed
+     (ou redo → volta ao spec-executor uma vez → nova review → reviewed)
 ```
 
 ## Agentes customizados
@@ -82,7 +83,7 @@ O pack define cinco agentes em `opencode.json`:
 - **orchestrator** — primary. Classifica a tarefa e delega. Sem write/edit/bash.
 - **spec-writer** — planeja. Só escreve em `.opencode/specs/`. Sem bash.
 - **spec-reviewer** — revisa specs (hard gates + SMART, incluindo estratégia de testes, threshold ≥ 3). Não edita nada.
-- **spec-executor** — executa specs `approved`. Write/edit/bash liberados. Registra `budget_usado` e outcome.
+- **spec-executor** — executa specs `approved` ou `redo`. Write/edit/bash liberados. Registra `budget_usado` e outcome.
 - **code-reviewer** — revisa código e testes/verificações após `done`. Veredito `approved` ou `redo` (1 retrabalho máximo).
 
 Fora dos comandos, os agentes padrão do OpenCode seguem funcionando normalmente.
